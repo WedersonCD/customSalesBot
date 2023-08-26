@@ -1,4 +1,5 @@
 import { generateUniqueId } from "../utils/utils"
+import { WHATSAPP_LINK }    from "../configs/messageConfig"
 
 const openedChatArray =[]
 
@@ -22,9 +23,14 @@ const getSystemMessage_Behavior = () =>{
 }
 
 const getSystemMessage_HumamHelperLink = () =>{
-    
+
+    return `Caso não consiga determinar uma boa opção envie esse link para falar com uma pessoa no Whatsapp: ${WHATSAPP_LINK}`
+
 }
 
+const getSystemMessage_Products = () =>{
+    return
+}
 
 const createNewChat = () =>{
 
