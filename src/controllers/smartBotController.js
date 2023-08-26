@@ -1,19 +1,21 @@
-import { generateUniqueId } from "../utils/utils"
+import  UTIL from "../utils/utils"
 import { WHATSAPP_LINK }    from "../configs/messageConfig"
 
-const openedChatArray =[]
+const chatArray =[]
 
 const getEmptyChatObject = () =>{
-
+    
     return {
-        id: generateUniqueId(),
+        id: UTIL.generateUniqueId(),
         createdAt: new Date().getTime(),
         totalIterations: 0,
+        status: 'created',
+        user: {},
+        products:[],
         messages: []
     }
 
 }
-
 
 const getSystemMessage_Behavior = () =>{
 
@@ -29,14 +31,44 @@ const getSystemMessage_HumamHelperLink = () =>{
 }
 
 const getSystemMessage_Products = () =>{
-    return
+
+    const productsList = UTIL.getCsvAsString('products') 
+
+    return `\nSegue a listagem:\n ${productsList}`
 }
 
-const createNewChat = () =>{
+const getSystemMessage = () =>{
+
+    const behavior          = getSystemMessage_Behavior();
+    const humamHelperLink   = getSystemMessage_HumamHelperLink();
+    const products          = getSystemMessage_Products();
+
+    return behavior+humamHelperLink+products
+
+
+}
+
+const getUserFirstMessage = (userData,firstMessage) => {
+
+    return `Sou o ${userData.nome} sexo ${userData.sexo} idade ${userData.idade}. ${firstMessage}`
+
+}
+
+const createNewChat = (userData,firstMessage) =>{
 
     chatObject      =   getEmptyChatObject()
-    systemMessage   =   getSystemMessage()
+    
+    const systemMessage   =   getSystemMessage()
+    const userMessage     =   getUserFirstMessage(userData,firstMessage)
 
+    chatObject.messages.push({role: 'system', content: systemMessage})
+    chatObject.messages.push({role: 'user', content: userMessage})
+    
+    chatObject.products=UTIL.getCsvAsArray('products')
+    
+    chatArray.push(chatObject)
 
-
+    return chatObject
+    
 }
+
