@@ -25,6 +25,10 @@ export const getCsvAsArray = (fileName) => {
 
 }
 
+export const getCurrentTimesTamp = ()=>{
+    return new Date().getTime()
+}
+
 export const getCsvAsString = (fileName) =>{
 
     const csvFilePath = `${DATA_PATH}/${fileName}.csv`;

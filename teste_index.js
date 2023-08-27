@@ -14,11 +14,11 @@ const openai = new OpenAI(OPEN_IA_API_CONFIGURATION);
 async function main() {
 
   const completion = await openai.chat.completions.create({
-    messages: [{ role: 'user', content: 'Say this is a test' }],
+    messages: [{ role: 'user', content: 'Say this is a test' },{role: 'user', content: 'pense no nome para uma girafa'},{role: 'assistant',content: 'o nome da girafa é Melman'},{role:'user',content:'da onde veio esse nome?'}],
     model: 'gpt-3.5-turbo'
   });
 
-  console.log(completion.response);
+  console.log(completion.choices);
   
 }
 

@@ -1,5 +1,6 @@
 import  UTIL from "../utils/utils"
 import { WHATSAPP_LINK }    from "../configs/messageConfig"
+import {getNewChatCompletion} from "../configs/chatGPTConfig"
 
 const chatArray =[]
 
@@ -7,7 +8,8 @@ const getEmptyChatObject = () =>{
     
     return {
         id: UTIL.generateUniqueId(),
-        createdAt: new Date().getTime(),
+        createdAt: UTIL.getCurrentTimesTamp(),
+        lastInteractionAt: 0,
         totalIterations: 0,
         status: 'created',
         user: {},
@@ -48,27 +50,61 @@ const getSystemMessage = () =>{
 
 }
 
-const getUserFirstMessage = (userData,firstMessage) => {
 
-    return `Sou o ${userData.nome} sexo ${userData.sexo} idade ${userData.idade}. ${firstMessage}`
 
-}
-
-const createNewChat = (userData,firstMessage) =>{
+const createChat = (firstMessage) =>{
 
     chatObject      =   getEmptyChatObject()
     
     const systemMessage   =   getSystemMessage()
-    const userMessage     =   getUserFirstMessage(userData,firstMessage)
 
     chatObject.messages.push({role: 'system', content: systemMessage})
-    chatObject.messages.push({role: 'user', content: userMessage})
+    chatObject.messages.push({role: 'user', content: firstMessage})
     
     chatObject.products=UTIL.getCsvAsArray('products')
     
     chatArray.push(chatObject)
 
-    return chatObject
+    return chatObject.id
+
+}
+
+const getChat = (chatId) =>{
+
+    return chatArray.filter((chat)=> chat.id==chatId)[0]
+
+}
+
+const setChatMessage = (chatId,role,message) =>{
     
+    chat = getChat(chatId);
+    chat.messages.push({role: role, content: message})
+
+    return chatId
+
+}
+
+const createNewInteraction = async (chatId,message) =>{
+    chat = getChat(chatId);
+    
+    chat.totalIterations+=1
+    chat.lastInteractionAt=UTIL.getCurrentTimesTamp()
+    setChatMessage(chatId,'user',message)
+    chat.status='talking'
+    const completion = await getNewChatCompletion(chat.messages)
+    const awnser = completion.choices[0].message.content;
+    setChatMessage(chatId,'assistant',awnser)
+    chat.status='waiting'
+
+    return {
+        chatId: chatId,
+        awnser: awnser
+    }
+
+}
+
+export default {
+    createChat,
+    createNewInteraction
 }
 
