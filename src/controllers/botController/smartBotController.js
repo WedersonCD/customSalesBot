@@ -42,7 +42,7 @@ const getSystemMessage = (productsArray,userData) =>{
 
 const createNewInteraction = async (messages,param) =>{
 
-    const completion = await chatGPTService.getNewChatCompletion(chat.messages)
+    const completion = await chatGPTService.getNewChatCompletion(messages,param)
     const awnser = completion.choices[0].message.content;
 
     return  awnser;

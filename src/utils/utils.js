@@ -1,7 +1,5 @@
 const fs = require('fs');
 
-
-
 //Generate unique Ids
 const generateUniqueId = () => {
     const timestamp = new Date().getTime().toString();

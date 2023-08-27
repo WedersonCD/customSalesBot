@@ -11,8 +11,8 @@ const getNewChatCompletion = async (messages,params) =>{
     params.temperature  =   params.temperature  || chatGPTConfig.OPEN_IA_DEFAULT_TEMPERATURE
     params.max_tokens   =   params.max_tokens   || chatGPTConfig.OPEN_AI_DEFAULT_MAX_TOKENS
     params.messages     =   messages
-
-    const chatCompletion = await openAI_API.chat.completions.create(params)
+    const completions = await openAI_API.chat.completions.create(params)
+    return completions
 
 }
 

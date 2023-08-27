@@ -71,9 +71,10 @@ const createChat = async (req,res) =>{
     const userData  = req.body.user;
 
     chatObject          =   getEmptyChatObject()
-    const systemMessage   = smartBotController.getSystemMessage(chatObject.products,userData)
 
     setChatProducts(chatObject)
+    const systemMessage   = smartBotController.getSystemMessage(chatObject.products,userData)
+
     setChatName(chatObject)
     setChatUser(chatObject,userData)
     setChatMessage(chatObject,'system',systemMessage)
@@ -99,14 +100,25 @@ const sendChatMessage = async (req,res) =>{
 
     chatObject = getChatById(chatId)
 
-    setChatMessage(chatObject,'user',message)
-    chatObject.status='talking'
-    const awnser = smartBotController.createNewInteraction(chatObject.message)
-    setChatMessage(chatObject,'assistant',awnser)
-    chatObject.status='waiting'
-    addChatInteraction(chatObject)
 
-    res.status(200).json({chatId: chatId,question: message,awnser: awnser})
+
+    try {
+        setChatMessage(chatObject,'user',message)
+
+        //*
+        chatObject.status='talking'
+        const awnser = await smartBotController.createNewInteraction(chatObject.messages)
+        setChatMessage(chatObject,'assistant',awnser)
+        chatObject.status='waiting'
+        addChatInteraction(chatObject)
+    
+        res.status(200).json({chatId: chatId,question: message,awnser: awnser})
+        //*/
+    }catch(error){
+        console.log(error)
+        res.status(500).json({error: error})
+    }
+
 
 }
 
