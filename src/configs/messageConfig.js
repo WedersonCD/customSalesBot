@@ -1,6 +1,6 @@
 const WHATSAPP_LINK = 'www.google.com.br';
 
 
-export default {
+module.exports= {
     WHATSAPP_LINK
 }

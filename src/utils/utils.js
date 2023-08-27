@@ -5,14 +5,14 @@ const DATA_PATH='../../data';
 
 
 //Generate unique Ids
-export const generateUniqueId = () => {
+const generateUniqueId = () => {
     const timestamp = new Date().getTime().toString();
     const random = Math.random().toString().substring(2, 8);
     return timestamp + random;
 }
 
 
-export const getCsvAsArray = (fileName) => {
+const getCsvAsArray = (fileName) => {
 
     const csvFilePath = `${DATA_PATH}/${fileName}.csv`;
     const csvData = [];
@@ -25,15 +25,20 @@ export const getCsvAsArray = (fileName) => {
 
 }
 
-export const getCurrentTimesTamp = ()=>{
+const getCurrentTimesTamp = ()=>{
     return new Date().getTime()
 }
 
-export const getCsvAsString = (fileName) =>{
+const getCsvAsString = (fileName) =>{
 
     const csvFilePath = `${DATA_PATH}/${fileName}.csv`;
 
     return fs.readFileSync(csvFilePath,'utf-8')
 }
 
-
+module.exports ={
+    generateUniqueId,
+    getCsvAsArray,
+    getCurrentTimesTamp,
+    getCsvAsString
+}

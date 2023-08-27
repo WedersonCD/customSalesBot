@@ -1,5 +1,5 @@
-import  UTIL from "../utils/utils"
-import { WHATSAPP_LINK }    from "../configs/messageConfig"
+const utils = require("../utils/utils")
+const messageConfig = require("../configs/messageConfig")
 const chatGPTService = require('../services/chatGPTService')
 
 const chatArray =[]
@@ -7,8 +7,8 @@ const chatArray =[]
 const getEmptyChatObject = () =>{
     
     return {
-        id: UTIL.generateUniqueId(),
-        createdAt: UTIL.getCurrentTimesTamp(),
+        id: utils.generateUniqueId(),
+        createdAt: utils.getCurrentTimesTamp(),
         lastInteractionAt: 0,
         totalIterations: 0,
         status: 'created',
@@ -28,13 +28,13 @@ const getSystemMessage_Behavior = () =>{
 
 const getSystemMessage_HumamHelperLink = () =>{
 
-    return `Caso não consiga determinar uma boa opção envie esse link para falar com uma pessoa no Whatsapp: ${WHATSAPP_LINK}`
+    return `Caso não consiga determinar uma boa opção envie esse link para falar com uma pessoa no Whatsapp: ${messageConfig.WHATSAPP_LINK}`
 
 }
 
 const getSystemMessage_Products = () =>{
 
-    const productsList = UTIL.getCsvAsString('products') 
+    const productsList = utils.getCsvAsString('products') 
 
     return `\nSegue a listagem:\n ${productsList}`
 }
@@ -61,7 +61,7 @@ const createChat = async (req,res) =>{
     chatObject.messages.push({role: 'system', content: systemMessage})
     chatObject.messages.push({role: 'user', content: firstMessage})
     
-    chatObject.products=UTIL.getCsvAsArray('products')
+    chatObject.products=utils.getCsvAsArray('products')
     
     chatArray.push(chatObject)
 
@@ -90,7 +90,7 @@ const createNewInteraction = async (chatId,message) =>{
     chat = getChat(chatId);
     
     chat.totalIterations+=1
-    chat.lastInteractionAt=UTIL.getCurrentTimesTamp()
+    chat.lastInteractionAt=utils.getCurrentTimesTamp()
     setChatMessage(chatId,'user',message)
     chat.status='talking'
     const completion = await chatGPTService.getNewChatCompletion(chat.messages)
