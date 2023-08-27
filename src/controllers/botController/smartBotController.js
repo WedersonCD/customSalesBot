@@ -16,31 +16,34 @@ const getSystemMessage_HumamHelperLink = () =>{
 
 }
 
+const getSystemMessage_UserInfo = (userData)    =>{
+
+    return `Voce esta atendendo um cliente com as seguintes caracteristicas: Nome ${userData.name} genero ${userData.gender} idade ${userData.age}.`
+
+}
+
 const getSystemMessage_Products = (productsArray) =>{
     const productsList = utils.getCsvStringFromArray(productsArray) 
 
     return `\nSegue a listagem:\n ${productsList}`
 }
 
-const getSystemMessage = (productsArray) =>{
+const getSystemMessage = (productsArray,userData) =>{
 
     const behavior          = getSystemMessage_Behavior();
     const humamHelperLink   = getSystemMessage_HumamHelperLink();
+    const userInfo          = getSystemMessage_UserInfo(userData);
     const products          = getSystemMessage_Products(productsArray);
 
-    return behavior+humamHelperLink+products
+    return behavior+userInfo+humamHelperLink+products
 
 
 }
 
-const createNewInteraction = async (chat) =>{
-    
-    chat.totalIterations+=1
-    chat.lastInteractionAt=utils.getCurrentTimesTamp()
-    chat.status='talking'
+const createNewInteraction = async (messages,param) =>{
+
     const completion = await chatGPTService.getNewChatCompletion(chat.messages)
     const awnser = completion.choices[0].message.content;
-    chat.status='waiting'
 
     return  awnser;
 

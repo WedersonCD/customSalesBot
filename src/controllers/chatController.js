@@ -8,6 +8,26 @@ const PRODUCSTS_PATH='../data/products.csv';
 
 const chatArray =[]
 
+const getEmptyChatObject = () =>{
+    
+    return {
+        id: utils.generateUniqueId(),
+        createdAt: utils.getCurrentTimesTamp(),
+        lastInteractionAt: 0,
+        totalIterations: 0,
+        status: 'created',
+        name: '',
+        user: {
+            name: "",
+            age: 0,
+            gender: ""
+        },
+        products:[],
+        messages: []
+    }
+
+}
+
 const setChatMessage = (chat,role,message) =>{
     
     chat.messages.push({role: role, content: message})
@@ -16,10 +36,15 @@ const setChatMessage = (chat,role,message) =>{
 
 }
 
+const getChatById =  (chatId) =>{
+
+    return chatArray.filter((chat)=> chat.id==chatId)[0]
+
+}
+
 const getChat = async (req,res) =>{
 
-    console.log(req)
-    const chatId = req.header.chatId
+    const chatId = req.query.chatId
 
     res.status(200).json(chatArray.filter((chat)=> chat.id==chatId)[0])
 
@@ -41,53 +66,52 @@ const setChatName = (chatObject)=>{
 
 }
 
-const getEmptyChatObject = () =>{
-    
-    return {
-        id: utils.generateUniqueId(),
-        createdAt: utils.getCurrentTimesTamp(),
-        lastInteractionAt: 0,
-        totalIterations: 0,
-        status: 'created',
-        name: '',
-        user: {
-            name: "",
-            age: 0,
-            gender: ""
-        },
-        products:[],
-        messages: []
-    }
-
-}
-
-
-
 const createChat = async (req,res) =>{
 
     const userData  = req.body.user;
-    const message   = req.body.message
 
     chatObject          =   getEmptyChatObject()
+    const systemMessage   = smartBotController.getSystemMessage(chatObject.products,userData)
 
     setChatProducts(chatObject)
     setChatName(chatObject)
     setChatUser(chatObject,userData)
-
-    const systemMessage   = smartBotController.getSystemMessage(chatObject.products)
-    const firstMessage    = dumbBotController.getUserTratedFirstMessage(userData,message)
-
-
     setChatMessage(chatObject,'system',systemMessage)
-    setChatMessage(chatObject,'user',firstMessage)
 
     const defaultMessage = dumbBotController.getDefaultMessageInChatOpened()
+    
+    chatArray.push(chatObject)
 
     res.status(200).json({chatId: chatObject.id,defaultMessage: defaultMessage})
 
 }
 
+const addChatInteraction =(chatObject)=>{
+    chatObject.totalIterations+=1
+    chatObject.lastInteractionAt=utils.getCurrentTimesTamp()
+
+}
+
+const sendChatMessage = async (req,res) =>{
+
+    const chatId = req.body.chatId
+    const message = req.body.message
+
+    chatObject = getChatById(chatId)
+
+    setChatMessage(chatObject,'user',message)
+    chatObject.status='talking'
+    const awnser = smartBotController.createNewInteraction(chatObject.message)
+    setChatMessage(chatObject,'assistant',awnser)
+    chatObject.status='waiting'
+    addChatInteraction(chatObject)
+
+    res.status(200).json({chatId: chatId,question: message,awnser: awnser})
+
+}
+
 module.exports ={
     createChat,
-    getChat
+    getChat,
+    sendChatMessage
 }
