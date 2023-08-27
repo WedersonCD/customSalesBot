@@ -51,11 +51,12 @@ const createNewInteraction = async (messages,param) =>{
 }
 
 const getRecommendedProduct =  async (messages,param) =>{
+    
+    messagesWithRecommendedMessage = [... messages]
 
-    messages.push({role: 'user', content: 'Se fossemos parar agora, qual produto seria recomendado? Responda apenas com o código.'})
+    messagesWithRecommendedMessage.push({role: 'user', content: 'Responda apenas com o código do produto e nenhum outro texto. Se fossemos parar agora, qual produto seria recomendado?'})
 
-    return await createNewInteraction(messages);
-
+    return await createNewInteraction(messamessagesWithRecommendedMessageges);
 
 }
 

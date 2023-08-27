@@ -138,7 +138,8 @@ const getRecommendedProductFromChat = async (chatObject) =>{
 
 const getRecommendedProduct = async (req,res) =>{
     
-    const chatId = req.body.chatId
+    const chatId = req.query.chatId
+
     chatObject = getChatById(chatId)
 
     try{
@@ -154,6 +155,8 @@ const getRecommendedProduct = async (req,res) =>{
 
 
 }
+
+
 
 
 module.exports ={
