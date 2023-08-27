@@ -50,8 +50,6 @@ const getSystemMessage = () =>{
 
 }
 
-
-
 const createChat = (firstMessage) =>{
 
     chatObject      =   getEmptyChatObject()
