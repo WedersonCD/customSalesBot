@@ -1,6 +1,6 @@
 import  UTIL from "../utils/utils"
 import { WHATSAPP_LINK }    from "../configs/messageConfig"
-import {getNewChatCompletion} from "../configs/chatGPTConfig"
+const chatGPTService = require('../services/chatGPTService')
 
 const chatArray =[]
 
@@ -50,7 +50,9 @@ const getSystemMessage = () =>{
 
 }
 
-const createChat = (firstMessage) =>{
+const createChat = async (req,res) =>{
+
+    console.log(req)
 
     chatObject      =   getEmptyChatObject()
     
@@ -63,7 +65,8 @@ const createChat = (firstMessage) =>{
     
     chatArray.push(chatObject)
 
-    return chatObject.id
+    res.status(200).json({chatId: chatObject.id})
+
 
 }
 
@@ -83,13 +86,14 @@ const setChatMessage = (chatId,role,message) =>{
 }
 
 const createNewInteraction = async (chatId,message) =>{
+    
     chat = getChat(chatId);
     
     chat.totalIterations+=1
     chat.lastInteractionAt=UTIL.getCurrentTimesTamp()
     setChatMessage(chatId,'user',message)
     chat.status='talking'
-    const completion = await getNewChatCompletion(chat.messages)
+    const completion = await chatGPTService.getNewChatCompletion(chat.messages)
     const awnser = completion.choices[0].message.content;
     setChatMessage(chatId,'assistant',awnser)
     chat.status='waiting'
@@ -101,7 +105,7 @@ const createNewInteraction = async (chatId,message) =>{
 
 }
 
-export default {
+module.exports = {
     createChat,
     createNewInteraction
 }
