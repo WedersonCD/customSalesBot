@@ -1,9 +1,9 @@
 const express = require('express');
 const app = express();
-const  smartBotRoutes = require('./routes/smartBotRoutes');
+const  chatRoute = require('./routes/chatRoute');
 
 app.use(express.json());
-app.use('/', smartBotRoutes);
+app.use('/', chatRoute);
 
 
 const hostname = '127.0.0.1';

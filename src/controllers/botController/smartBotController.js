@@ -1,5 +1,6 @@
-const chatConfig = require("../../configs/chatConfig")
-const chatGPTService = require('../../services/chatGPTService')
+const chatConfig        = require("../../configs/chatConfig")
+const chatGPTService    = require('../../services/chatGPTService')
+const utils             = require("../../utils/utils")
 
 
 const getSystemMessage_Behavior = () =>{
@@ -16,7 +17,6 @@ const getSystemMessage_HumamHelperLink = () =>{
 }
 
 const getSystemMessage_Products = (productsArray) =>{
-
     const productsList = utils.getCsvStringFromArray(productsArray) 
 
     return `\nSegue a listagem:\n ${productsList}`

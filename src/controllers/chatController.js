@@ -4,7 +4,7 @@ const chatConfig            = require("../configs/chatConfig")
 const utils                 = require("../utils/utils")
 
 
-const PRODUCSTS_PATH='../../data/products.csv';
+const PRODUCSTS_PATH='../data/products.csv';
 
 const chatArray =[]
 
@@ -16,9 +16,12 @@ const setChatMessage = (chat,role,message) =>{
 
 }
 
-const getChat = (chatId) =>{
+const getChat = async (req,res) =>{
 
-    return chatArray.filter((chat)=> chat.id==chatId)[0]
+    console.log(req)
+    const chatId = req.header.chatId
+
+    res.status(200).json(chatArray.filter((chat)=> chat.id==chatId)[0])
 
 }
 
@@ -29,7 +32,7 @@ const setChatUser = (chat,userData)=>{
 
 const setChatProducts = (chatObject)=>{
 
-    chatObject.products =   utils.getCsvAsArray(PRODUCSTS_PATH)
+    chatObject.products = utils.getCsvAsArray(PRODUCSTS_PATH)
 
 }
 
@@ -77,11 +80,12 @@ const createChat = async (req,res) =>{
     setChatMessage(chatObject,'user',firstMessage)
 
     const defaultMessage = dumbBotController.getDefaultMessageInChatOpened()
-    
-    res.status(200).json({chatId: chatId,defaultMessage: defaultMessage})
+
+    res.status(200).json({chatId: chatObject.id,defaultMessage: defaultMessage})
 
 }
 
 module.exports ={
-    createChat
+    createChat,
+    getChat
 }

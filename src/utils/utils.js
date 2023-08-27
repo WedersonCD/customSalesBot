@@ -1,5 +1,4 @@
 const fs = require('fs');
-const csv = require('csv-parser');
 
 
 
@@ -11,16 +10,24 @@ const generateUniqueId = () => {
 }
 
 
-const getCsvAsArray = (path) => {
+const getCsvAsArray = (filePath) => {
 
-    const csvFilePath = path
-    const csvData = [];
+    const csvData = fs.readFileSync(filePath, 'utf-8');
 
-    fs.createReadStream(csvFilePath).pipe(csv()).on('data', (row) => {
-        csvData.push(row);
-    })
+    const lines = csvData.split('\n');
+    const headers = lines[0].split(',');
+    
+    const jsonArray = [];
+    for (let i = 1; i < lines.length; i++) {
+        const values = lines[i].split(',');
+        const jsonEntry = {};
+        for (let j = 0; j < headers.length; j++) {
+            jsonEntry[headers[j]] = values[j];
+        }
+        jsonArray.push(jsonEntry);
+    }
 
-    return csvData
+    return jsonArray
 
 }
 
