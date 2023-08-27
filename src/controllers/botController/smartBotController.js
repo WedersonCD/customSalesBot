@@ -1,6 +1,6 @@
-const utils = require("../utils/utils")
-const messageConfig = require("../configs/messageConfig")
-const chatGPTService = require('../services/chatGPTService')
+const utils = require("../../utils/utils")
+const messageConfig = require("../../configs/messageConfig")
+const chatGPTService = require('../../services/chatGPTService')
 
 const chatArray =[]
 
@@ -52,7 +52,6 @@ const getSystemMessage = () =>{
 
 const createChat = async (req,res) =>{
 
-    console.log(req)
 
     chatObject      =   getEmptyChatObject()
     

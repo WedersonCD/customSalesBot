@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router();
 
-const smartBotController = require('../controllers/smartBotController');
+const smartBotController = require('../controllers/botController/smartBotController');
 
 
 router.post('/createChat',smartBotController.createChat)
