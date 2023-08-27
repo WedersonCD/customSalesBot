@@ -41,8 +41,6 @@ const setChatName = (chatObject)=>{
 
 }
 
-
-
 const getEmptyChatObject = () =>{
     
     return {
@@ -52,7 +50,11 @@ const getEmptyChatObject = () =>{
         totalIterations: 0,
         status: 'created',
         name: '',
-        user: {},
+        user: {
+            name: "",
+            age: 0,
+            gender: ""
+        },
         products:[],
         messages: []
     }

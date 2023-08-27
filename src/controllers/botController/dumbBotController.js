@@ -3,7 +3,7 @@ const chatConfig = require("../../configs/chatConfig")
 
 const getUserTratedFirstMessage = (userData,firstMessage) => {
 
-    return `Sou o ${userData.nome} sexo ${userData.sexo} idade ${userData.idade}. ${firstMessage}`
+    return `Sou o ${userData.name} sexo ${userData.gender} idade ${userData.age}. ${firstMessage}`
 
 }
 
