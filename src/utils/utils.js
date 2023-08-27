@@ -1,7 +1,6 @@
 const fs = require('fs');
 const csv = require('csv-parser');
 
-const DATA_PATH='../../data';
 
 
 //Generate unique Ids
@@ -12,33 +11,51 @@ const generateUniqueId = () => {
 }
 
 
-const getCsvAsArray = (fileName) => {
+const getCsvAsArray = (path) => {
 
-    const csvFilePath = `${DATA_PATH}/${fileName}.csv`;
+    const csvFilePath = path
     const csvData = [];
 
     fs.createReadStream(csvFilePath).pipe(csv()).on('data', (row) => {
-            csvData.push(row);
+        csvData.push(row);
     })
 
-    return  csvData
+    return csvData
 
 }
 
-const getCurrentTimesTamp = ()=>{
+const getCurrentTimesTamp = () => {
     return new Date().getTime()
 }
 
-const getCsvAsString = (fileName) =>{
+const getCsvStringFromArray = (jsonData) => {
 
-    const csvFilePath = `${DATA_PATH}/${fileName}.csv`;
+    const fields = Object.keys(jsonData[0]);
 
-    return fs.readFileSync(csvFilePath,'utf-8')
+    const csvRows = [fields.join(',')];
+
+    jsonData.forEach(obj => {
+        const values = fields.map(field => obj[field]);
+        csvRows.push(values.join(','));
+    });
+
+    const csvString = csvRows.join('\n');
+
+    return csvString;
+
 }
 
-module.exports ={
+const getCsvAsString = (path) => {
+
+    const csvFilePath = path
+
+    return fs.readFileSync(csvFilePath, 'utf-8')
+}
+
+module.exports = {
     generateUniqueId,
     getCsvAsArray,
     getCurrentTimesTamp,
-    getCsvAsString
+    getCsvAsString,
+    getCsvStringFromArray
 }

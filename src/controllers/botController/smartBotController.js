@@ -1,23 +1,6 @@
-const utils = require("../../utils/utils")
-const messageConfig = require("../../configs/messageConfig")
+const chatConfig = require("../../configs/chatConfig")
 const chatGPTService = require('../../services/chatGPTService')
 
-const chatArray =[]
-
-const getEmptyChatObject = () =>{
-    
-    return {
-        id: utils.generateUniqueId(),
-        createdAt: utils.getCurrentTimesTamp(),
-        lastInteractionAt: 0,
-        totalIterations: 0,
-        status: 'created',
-        user: {},
-        products:[],
-        messages: []
-    }
-
-}
 
 const getSystemMessage_Behavior = () =>{
 
@@ -28,84 +11,43 @@ const getSystemMessage_Behavior = () =>{
 
 const getSystemMessage_HumamHelperLink = () =>{
 
-    return `Caso não consiga determinar uma boa opção envie esse link para falar com uma pessoa no Whatsapp: ${messageConfig.WHATSAPP_LINK}`
+    return `Caso não consiga determinar uma boa opção envie esse link para falar com uma pessoa no Whatsapp: ${chatConfig.WHATSAPP_LINK}`
 
 }
 
-const getSystemMessage_Products = () =>{
+const getSystemMessage_Products = (productsArray) =>{
 
-    const productsList = utils.getCsvAsString('products') 
+    const productsList = utils.getCsvStringFromArray(productsArray) 
 
     return `\nSegue a listagem:\n ${productsList}`
 }
 
-const getSystemMessage = () =>{
+const getSystemMessage = (productsArray) =>{
 
     const behavior          = getSystemMessage_Behavior();
     const humamHelperLink   = getSystemMessage_HumamHelperLink();
-    const products          = getSystemMessage_Products();
+    const products          = getSystemMessage_Products(productsArray);
 
     return behavior+humamHelperLink+products
 
 
 }
 
-const createChat = async (req,res) =>{
-
-
-    chatObject      =   getEmptyChatObject()
-    
-    const systemMessage   =   getSystemMessage()
-
-    chatObject.messages.push({role: 'system', content: systemMessage})
-    chatObject.messages.push({role: 'user', content: firstMessage})
-    
-    chatObject.products=utils.getCsvAsArray('products')
-    
-    chatArray.push(chatObject)
-
-    res.status(200).json({chatId: chatObject.id})
-
-
-}
-
-const getChat = (chatId) =>{
-
-    return chatArray.filter((chat)=> chat.id==chatId)[0]
-
-}
-
-const setChatMessage = (chatId,role,message) =>{
-    
-    chat = getChat(chatId);
-    chat.messages.push({role: role, content: message})
-
-    return chatId
-
-}
-
-const createNewInteraction = async (chatId,message) =>{
-    
-    chat = getChat(chatId);
+const createNewInteraction = async (chat) =>{
     
     chat.totalIterations+=1
     chat.lastInteractionAt=utils.getCurrentTimesTamp()
-    setChatMessage(chatId,'user',message)
     chat.status='talking'
     const completion = await chatGPTService.getNewChatCompletion(chat.messages)
     const awnser = completion.choices[0].message.content;
-    setChatMessage(chatId,'assistant',awnser)
     chat.status='waiting'
 
-    return {
-        chatId: chatId,
-        awnser: awnser
-    }
+    return  awnser;
 
 }
 
 module.exports = {
-    createChat,
-    createNewInteraction
+    createNewInteraction,
+    getSystemMessage
 }
 

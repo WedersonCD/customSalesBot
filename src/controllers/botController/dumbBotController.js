@@ -1,3 +1,4 @@
+const chatConfig = require("../../configs/chatConfig")
 
 
 const getUserTratedFirstMessage = (userData,firstMessage) => {
@@ -6,14 +7,13 @@ const getUserTratedFirstMessage = (userData,firstMessage) => {
 
 }
 
+const getDefaultMessageInChatOpened = () =>{
+    return `Olá sou o ${chatConfig.BOT_NAME}! Seu assistente pessoal de compras.\n Como posso te ajudar?`
+}
 
-const firstUserInteraction = async (req,res) =>{
-
-    const userData      = req.body.user;
-    const message   = req.body.message
-
-    firstMessage = getUserTratedFirstMessage(userData,message)
-
+module.exports = {
+    getUserTratedFirstMessage,
+    getDefaultMessageInChatOpened
 }
 
 
