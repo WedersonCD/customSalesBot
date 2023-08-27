@@ -22,6 +22,7 @@ const getEmptyChatObject = () =>{
             age: 0,
             gender: ""
         },
+        recommendedProduct: '',  
         products:[],
         messages: []
     }
@@ -66,6 +67,12 @@ const setChatName = (chatObject)=>{
 
 }
 
+const setChatRecommendedProduct = (chatObject,recommendedProduct)=>{
+    chatObject.recommendedProduct     =  recommendedProduct;
+
+}
+
+
 const createChat = async (req,res) =>{
 
     const userData  = req.body.user;
@@ -100,8 +107,6 @@ const sendChatMessage = async (req,res) =>{
 
     chatObject = getChatById(chatId)
 
-
-
     try {
         setChatMessage(chatObject,'user',message)
 
@@ -122,8 +127,38 @@ const sendChatMessage = async (req,res) =>{
 
 }
 
+const getRecommendedProductFromChat = async (chatObject) =>{
+
+
+    return  await   smartBotController.getRecommendedProduct(chatObject.messages)
+
+}
+
+
+
+const getRecommendedProduct = async (req,res) =>{
+    
+    const chatId = req.body.chatId
+    chatObject = getChatById(chatId)
+
+    try{
+        const recommendedProduct = await getRecommendedProductFromChat(chatObject);
+        setChatRecommendedProduct(chatObject,recommendedProduct)
+        res.status(200).json({chatId: chatId,recommendedProduct: recommendedProduct})
+
+    }catch(error){
+        console.log(error)
+        res.status(500).json({error: error})
+
+    }
+
+
+}
+
+
 module.exports ={
     createChat,
     getChat,
-    sendChatMessage
+    sendChatMessage,
+    getRecommendedProduct
 }

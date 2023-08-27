@@ -23,6 +23,7 @@ const getSystemMessage_UserInfo = (userData)    =>{
 }
 
 const getSystemMessage_Products = (productsArray) =>{
+
     const productsList = utils.getCsvStringFromArray(productsArray) 
 
     return `\nSegue a listagem:\n ${productsList}`
@@ -49,8 +50,19 @@ const createNewInteraction = async (messages,param) =>{
 
 }
 
+const getRecommendedProduct =  async (messages,param) =>{
+
+    messages.push({role: 'user', content: 'Se fossemos parar agora, qual produto seria recomendado? Responda apenas com o código.'})
+
+    return await createNewInteraction(messages);
+
+
+}
+
+
 module.exports = {
     createNewInteraction,
-    getSystemMessage
+    getSystemMessage,
+    getRecommendedProduct
 }
 
