@@ -24,6 +24,15 @@ utils.getDistinctArrayOfObjects = (array) =>{
     return distinctArray.map(obj =>JSON.parse(obj))
 }
 
+utils.deletePropertieFromObjectsInArray =(array,propertie) =>{
+
+    array.forEach(obj=>{
+        utils.deletePropertieFromObject(obj,propertie)
+
+    })
+
+}
+
 utils.getStringifyObjectWithOutSomeProperties = (object,properties)=>{
     
     let objectKey = {... object}
