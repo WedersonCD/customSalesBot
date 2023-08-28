@@ -107,7 +107,7 @@ utils.getCsvAsArray = (filePath) => {
     }
     
     const jsonArray = [];
-    for (let i = 1; i < 2; i++) {
+    for (let i = 1; i < lines.length; i++) {
         const values = lines[i].split(',');
         const jsonEntry = {};
         for (let j = 0; j < headers.length; j++) {
