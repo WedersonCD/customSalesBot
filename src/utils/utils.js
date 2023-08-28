@@ -15,6 +15,14 @@ utils.deletePropertieFromObject = (obj,propertie) =>{
 
 }
 
+utils.getDistinctArrayOfObjects = (array) =>{
+
+    distinctArray = array.map((obj)=>{return JSON.stringify(obj)})
+
+    distinctArray = [... new Set(distinctArray)]
+
+    return distinctArray.map(obj =>{ return JSON.parse(obj)})
+}
 
 
 utils.getCsvAsArray = (filePath) => {
