@@ -74,9 +74,10 @@ const setChatProducts_grouped = (chatObject)=>{
 
 const setChatProducts_String = (chatObject)=>{
 
-    chatObject.products.string = [... chatObject.products.grouped]
+    chatObject.products.string = utils.getCopyOfArrayOfObjects(chatObject.products.grouped)
     utils.deletePropertieFromObjectsInArray(chatObject.products.string,productsConfig.COLUMN_ID)
     utils.deletePropertieFromObjectsInArray(chatObject.products.string,productsConfig.COLUMN_ID+'_Array')
+    utils.deletePropertieFromObjectsInArray(chatObject.products.string,productsConfig.COLUMN_COLOR)
     utils.deletePropertieFromObjectsInArray(chatObject.products.string,productsConfig.COLUMN_COLOR+'_Array')
     utils.deletePropertieFromObjectsInArray(chatObject.products.string,'groupedObjectKey')
 
