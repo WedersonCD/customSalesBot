@@ -59,7 +59,7 @@ utils.getGroupPropertiesFromArrayOfObjects = (array, properties)=>{
 
         if(mainDistinctObject[objectKey]){
             properties.forEach((propertie)=>{
-                mainDistinctObject[objectKey][propertie].push(tempObject[propertie])
+                mainDistinctObject[objectKey][propertie+'_Array'].push(tempObject[propertie])
 
             })
 
@@ -68,7 +68,7 @@ utils.getGroupPropertiesFromArrayOfObjects = (array, properties)=>{
             mainDistinctObject[objectKey]['groupedObjectKey']=objectKey
 
             properties.forEach((propertie)=>{
-                mainDistinctObject[objectKey][propertie]=[tempObject[propertie]]
+                mainDistinctObject[objectKey][propertie+'_Array']=[tempObject[propertie]]
 
             })
 
@@ -82,7 +82,7 @@ utils.getGroupPropertiesFromArrayOfObjects = (array, properties)=>{
     for(const objectKey in mainDistinctObject){
 
         properties.forEach((propertie)=>{
-            mainDistinctObject[objectKey][propertie+'_String']=mainDistinctObject[objectKey][propertie].toString().replace(',','/')
+            mainDistinctObject[objectKey][propertie]=mainDistinctObject[objectKey][propertie+'_Array'].toString().replace(',','/')
 
         })
 

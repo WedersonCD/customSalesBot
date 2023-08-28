@@ -22,19 +22,18 @@ const getSystemMessage_UserInfo = (userData)    =>{
 
 }
 
-const getSystemMessage_Products = (productsArray) =>{
+const getSystemMessage_Products = (productsString) =>{
 
-    const productsList = utils.getCsvStringFromArray(productsArray) 
 
-    return `\nSegue a listagem:\n ${productsList}`
+    return `\nSegue a listagem:\n ${productsString}`
 }
 
-const getSystemMessage = (productsArray,userData) =>{
+const getSystemMessage = (productsString,userData) =>{
 
     const behavior          = getSystemMessage_Behavior();
     const humamHelperLink   = getSystemMessage_HumamHelperLink();
     const userInfo          = getSystemMessage_UserInfo(userData);
-    const products          = getSystemMessage_Products(productsArray);
+    const products          = getSystemMessage_Products(productsString);
 
     return behavior+userInfo+humamHelperLink+products
 

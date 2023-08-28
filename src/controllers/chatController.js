@@ -1,6 +1,8 @@
 const smartBotController    = require('./botController/smartBotController');
 const dumbBotController     = require('./botController/dumbBotController');
 const chatConfig            = require("../configs/chatConfig")
+const productsConfig        = require("../configs/productsConfig")
+
 const utils                 = require("../utils/utils")
 
 
@@ -26,7 +28,7 @@ const getEmptyChatObject = () =>{
         products:{
             raw:[],
             groupped:[],
-            string:[]
+            string:""
         },
         messages: []
     }
@@ -60,11 +62,34 @@ const setChatUser = (chat,userData)=>{
 
 }
 
+const setChatProducts_Raw = (chatObject)=>{
+    chatObject.products.raw= utils.getCsvAsArray(PRODUCSTS_PATH)
+}
+
+const setChatProducts_Groupped = (chatObject)=>{
+    chatObject.products.groupped=utils.getGroupPropertiesFromArrayOfObjects(chatObject.products.raw,[productsConfig.COLUMN_ID,productsConfig.COLUMN_COLOR])
+    utils.setSequencialIDToArrayOfObjects(chatObject.products.groupped,'!codigo',productsConfig.DISTINCT_ID_PREFIX)
+
+}
+
+const setChatProducts_String = (chatObject)=>{
+
+    chatObject.products.string = [... chatObject.products.groupped]
+    utils.deletePropertieFromObject(chatObject.products.string,productsConfig.COLUMN_ID)
+    utils.deletePropertieFromObject(chatObject.products.string,productsConfig.COLUMN_ID+'_Array')
+    utils.deletePropertieFromObject(chatObject.products.string,productsConfig.COLUMN_COLOR+'_Array')
+    utils.deletePropertieFromObject(chatObject.products.string,'groupedObjectKey')
+
+    chatObject.products.string = utils.getCsvStringFromArray(productsArray)
+
+}
+
 
 const setChatProducts = (chatObject)=>{
 
-    chatObject.products = utils.getCsvAsArray(PRODUCSTS_PATH)
-    chatObject
+    setChatProducts_Raw(chatObject)
+    setChatProducts_Groupped(chatObject) 
+    setChatProducts_String(chatObject)
 
 }
 
@@ -86,7 +111,7 @@ const createChat = async (req,res) =>{
     chatObject          =   getEmptyChatObject()
 
     setChatProducts(chatObject)
-    const systemMessage   = smartBotController.getSystemMessage(chatObject.products,userData)
+    const systemMessage   = smartBotController.getSystemMessage(chatObject.products.string,userData)
 
     setChatName(chatObject)
     setChatUser(chatObject,userData)
