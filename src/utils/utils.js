@@ -99,18 +99,23 @@ utils.getCsvAsArray = (filePath) => {
     const csvData = fs.readFileSync(filePath, 'utf-8');
 
     const lines = csvData.split('\n');
-    const headers = lines[0].split(',');
+    const headers = lines[0].replace('\r','').split(',');
+  
+    //If the first value is the character 'zero-width no-break space' he HAVE to be removed.
+    if(headers[0].charCodeAt(0)==65279){
+      headers[0]=headers[0].slice(1)
+    }
     
     const jsonArray = [];
-    for (let i = 1; i < lines.length; i++) {
+    for (let i = 1; i < 2; i++) {
         const values = lines[i].split(',');
         const jsonEntry = {};
         for (let j = 0; j < headers.length; j++) {
-            jsonEntry[headers[j]] = values[j];
+            jsonEntry[headers[j]] = values[j].replace('\r','');
         }
         jsonArray.push(jsonEntry);
     }
-
+  
     return jsonArray
 
 }
