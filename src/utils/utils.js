@@ -82,7 +82,7 @@ utils.getGroupPropertiesFromArrayOfObjects = (array, properties)=>{
     for(const objectKey in mainDistinctObject){
 
         properties.forEach((propertie)=>{
-            mainDistinctObject[objectKey][propertie]=mainDistinctObject[objectKey][propertie+'_Array'].toString().replace(',','/')
+            mainDistinctObject[objectKey][propertie]=mainDistinctObject[objectKey][propertie+'_Array'].toString().replaceAll(',','/')
 
         })
 
