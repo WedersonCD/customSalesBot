@@ -111,6 +111,7 @@ utils.getCsvAsArray = (filePath) => {
         const values = lines[i].split(',');
         const jsonEntry = {};
         for (let j = 0; j < headers.length; j++) {
+            values[j] = values[j] || ''
             jsonEntry[headers[j]] = values[j].replace('\r','');
         }
         jsonArray.push(jsonEntry);
