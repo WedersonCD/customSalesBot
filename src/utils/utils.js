@@ -24,10 +24,14 @@ utils.getDistinctArrayOfObjects = (array) =>{
     return distinctArray.map(obj =>JSON.parse(obj))
 }
 
-utils.getStringifyObjectWithOutOnePropertie = (object,propertie)=>{
+utils.getStringifyObjectWithOutSomeProperties = (object,properties)=>{
     
     let objectKey = {... object}
-    utils.deletePropertieFromObject(objectKey,propertie)
+    properties.forEach((propertie)=>{
+        utils.deletePropertieFromObject(objectKey,propertie)
+
+    })
+
     objectKey=JSON.stringify(objectKey)
 
     return objectKey
@@ -35,35 +39,50 @@ utils.getStringifyObjectWithOutOnePropertie = (object,propertie)=>{
 }
 
 
-utils.getGroupPropertieFromArrayOfObjects = (array, propertie)=>{
+utils.getGroupPropertiesFromArrayOfObjects = (array, properties)=>{
+
 
     const mainDistinctObject={}
 
     array.forEach((obj)=>{
         tempObject= {... obj}
-        const objectKey=utils.getStringifyObjectWithOutOnePropertie(tempObject,propertie)
+        const objectKey=utils.getStringifyObjectWithOutSomeProperties(tempObject,properties)
 
         if(mainDistinctObject[objectKey]){
-            mainDistinctObject[objectKey][propertie].push(tempObject[propertie])
+            properties.forEach((propertie)=>{
+                mainDistinctObject[objectKey][propertie].push(tempObject[propertie])
+
+            })
 
         }else{
             mainDistinctObject[objectKey]=tempObject
-            mainDistinctObject[objectKey][propertie]=[tempObject[propertie]]
             mainDistinctObject[objectKey]['groupedObjectKey']=objectKey
+
+            properties.forEach((propertie)=>{
+                mainDistinctObject[objectKey][propertie]=[tempObject[propertie]]
+
+            })
 
         }
 
 
     })
 
-    const distinctObject=[]
+    const distinctArray=[]
 
     for(const objectKey in mainDistinctObject){
-        mainDistinctObject[objectKey][propertie+'String']=mainDistinctObject[objectKey][propertie].toString().replace(',','/')
-        distinctObject.push(mainDistinctObject[objectKey])
+
+        properties.forEach((propertie)=>{
+            //mainDistinctObject[objectKey][propertie]=[tempObject[propertie]]
+            mainDistinctObject[objectKey][propertie+'_String']=mainDistinctObject[objectKey][propertie].toString().replace(',','/')
+
+        })
+
+        distinctArray.push(mainDistinctObject[objectKey])
+
     }
 
-    return distinctObject
+    return distinctArray
 
 }
 
