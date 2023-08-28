@@ -49,13 +49,13 @@ const createNewInteraction = async (messages,param) =>{
 
 }
 
-const getRecommendedProduct =  async (messages,param) =>{
+const getRecommendedGroupedProduct =  async (messages,param) =>{
     
     messagesWithRecommendedMessage = [... messages]
 
     messagesWithRecommendedMessage.push({role: 'user', content: 'Responda apenas com o código do produto e nenhum outro texto. Se fossemos parar agora, qual produto seria recomendado?'})
 
-    return await createNewInteraction(messamessagesWithRecommendedMessageges);
+    return await createNewInteraction(messagesWithRecommendedMessage);
 
 }
 
@@ -63,6 +63,6 @@ const getRecommendedProduct =  async (messages,param) =>{
 module.exports = {
     createNewInteraction,
     getSystemMessage,
-    getRecommendedProduct
+    getRecommendedGroupedProduct
 }
 

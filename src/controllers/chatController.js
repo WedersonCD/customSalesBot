@@ -158,21 +158,21 @@ const sendChatMessage = async (req,res) =>{
 
 }
 
-const getRecommendedProductFromChat = async (chatObject) =>{
+const getRecommendedGroupedProductFromChat = async (chatObject) =>{
 
-    return  await   smartBotController.getRecommendedProduct(chatObject.messages)
+    return  await   smartBotController.getRecommendedGroupedProduct(chatObject.messages)
 
 }
 
 
-const getRecommendedProduct = async (req,res) =>{
+const getRecommendedGroupedProduct = async (req,res) =>{
     
     const chatId = req.query.chatId
 
     chatObject = getChatById(chatId)
 
     try{
-        const recommendedProduct = await getRecommendedProductFromChat(chatObject);
+        const recommendedProduct = await getRecommendedGroupedProductFromChat(chatObject);
         setChatRecommendedProduct(chatObject,recommendedProduct)
         res.status(200).json({chatId: chatId,recommendedProduct: recommendedProduct})
 
@@ -192,5 +192,5 @@ module.exports ={
     createChat,
     getChat,
     sendChatMessage,
-    getRecommendedProduct
+    getRecommendedGroupedProduct
 }
