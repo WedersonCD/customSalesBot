@@ -101,7 +101,7 @@ utils.getCsvAsArray = (filePath) => {
     const lines = csvData.split('\n');
     const headers = lines[0].replace('\r','').split(',');
   
-    //If the first value is the character 'zero-width no-break space' he HAVE to be removed.
+    //If the first value is the character 'zero-width no-break space' it must be removed.
     if(headers[0].charCodeAt(0)==65279){
       headers[0]=headers[0].slice(1)
     }

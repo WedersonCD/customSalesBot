@@ -80,7 +80,7 @@ const setChatProducts_String = (chatObject)=>{
     utils.deletePropertieFromObject(chatObject.products.string,productsConfig.COLUMN_COLOR+'_Array')
     utils.deletePropertieFromObject(chatObject.products.string,'groupedObjectKey')
 
-    chatObject.products.string = utils.getCsvStringFromArray(productsArray)
+    chatObject.products.string = utils.getCsvStringFromArray(chatObject.products.string)
 
 }
 
