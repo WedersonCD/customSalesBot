@@ -1,8 +1,8 @@
-const WHATSAPP_LINK = 'www.google.com.br';
-const BOT_NAME = 'Platão'
+const chatConfig = {}
 
 
-module.exports= {
-    WHATSAPP_LINK,
-    BOT_NAME
-}
+chatConfig.WHATSAPP_LINK = 'www.google.com.br';
+chatConfig.BOT_NAME = 'Platão'
+
+
+module.exports= chatConfig
