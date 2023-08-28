@@ -38,6 +38,15 @@ utils.getStringifyObjectWithOutSomeProperties = (object,properties)=>{
 
 }
 
+utils.setSequencialIDToArrayOfObjects = (array,idName,idPrefix) =>{
+    idPrefix = idPrefix || ''
+    count=1
+    array.map(obj=>{
+        obj[idName]=idPrefix+count
+        count+=1
+    })
+
+}
 
 utils.getGroupPropertiesFromArrayOfObjects = (array, properties)=>{
 
@@ -73,7 +82,6 @@ utils.getGroupPropertiesFromArrayOfObjects = (array, properties)=>{
     for(const objectKey in mainDistinctObject){
 
         properties.forEach((propertie)=>{
-            //mainDistinctObject[objectKey][propertie]=[tempObject[propertie]]
             mainDistinctObject[objectKey][propertie+'_String']=mainDistinctObject[objectKey][propertie].toString().replace(',','/')
 
         })
