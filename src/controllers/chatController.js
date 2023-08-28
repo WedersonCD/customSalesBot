@@ -23,7 +23,11 @@ const getEmptyChatObject = () =>{
             gender: ""
         },
         recommendedProduct: '',  
-        products:[],
+        products:{
+            raw:[],
+            groupped:[],
+            string:[]
+        },
         messages: []
     }
 
@@ -56,9 +60,11 @@ const setChatUser = (chat,userData)=>{
 
 }
 
+
 const setChatProducts = (chatObject)=>{
 
     chatObject.products = utils.getCsvAsArray(PRODUCSTS_PATH)
+    chatObject
 
 }
 
@@ -124,16 +130,13 @@ const sendChatMessage = async (req,res) =>{
         res.status(500).json({error: error})
     }
 
-
 }
 
 const getRecommendedProductFromChat = async (chatObject) =>{
 
-
     return  await   smartBotController.getRecommendedProduct(chatObject.messages)
 
 }
-
 
 
 const getRecommendedProduct = async (req,res) =>{
