@@ -1,14 +1,23 @@
 const fs = require('fs');
 
+
+const utils ={}
+
 //Generate unique Ids
-const generateUniqueId = () => {
+utils.generateUniqueId = () => {
     const timestamp = new Date().getTime().toString();
     const random = Math.random().toString().substring(2, 8);
     return timestamp + random;
 }
 
+const deletePropertieFromObject = (obj,propertie) =>{
+    delete obj[propertie]
 
-const getCsvAsArray = (filePath) => {
+}
+
+
+
+utils.getCsvAsArray = (filePath) => {
 
     const csvData = fs.readFileSync(filePath, 'utf-8');
 
@@ -29,11 +38,11 @@ const getCsvAsArray = (filePath) => {
 
 }
 
-const getCurrentTimesTamp = () => {
+utils.getCurrentTimesTamp = () => {
     return new Date().getTime()
 }
 
-const getCsvStringFromArray = (jsonData) => {
+utils.getCsvStringFromArray = (jsonData) => {
 
     const fields = Object.keys(jsonData[0]);
 
@@ -50,17 +59,11 @@ const getCsvStringFromArray = (jsonData) => {
 
 }
 
-const getCsvAsString = (path) => {
+utils.getCsvAsString = (path) => {
 
     const csvFilePath = path
 
     return fs.readFileSync(csvFilePath, 'utf-8')
 }
 
-module.exports = {
-    generateUniqueId,
-    getCsvAsArray,
-    getCurrentTimesTamp,
-    getCsvAsString,
-    getCsvStringFromArray
-}
+module.exports = utils
