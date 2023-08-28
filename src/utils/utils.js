@@ -24,6 +24,14 @@ utils.getDistinctArrayOfObjects = (array) =>{
     return distinctArray.map(obj =>JSON.parse(obj))
 }
 
+utils.getCopyOfArrayOfObjects= (array) =>{
+
+    return array.map(obj => {
+        return {... obj}
+    })
+
+}
+
 utils.deletePropertieFromObjectsInArray =(array,propertie) =>{
 
     array.forEach(obj=>{
