@@ -24,6 +24,48 @@ utils.getDistinctArrayOfObjects = (array) =>{
     return distinctArray.map(obj =>JSON.parse(obj))
 }
 
+utils.getStringifyObjectWithOutOnePropertie = (object,propertie)=>{
+    
+    let objectKey = {... object}
+    utils.deletePropertieFromObject(objectKey,propertie)
+    objectKey=JSON.stringify(objectKey)
+
+    return objectKey
+
+}
+
+
+utils.getGroupPropertieFromArrayOfObjects = (array, propertie)=>{
+
+    const mainDistinctObject={}
+
+    array.forEach((obj)=>{
+        tempObject= {... obj}
+        const objectKey=utils.getStringifyObjectWithOutOnePropertie(tempObject,propertie)
+
+        if(mainDistinctObject[objectKey]){
+            mainDistinctObject[objectKey][propertie].push(tempObject[propertie])
+
+        }else{
+            mainDistinctObject[objectKey]=tempObject
+            mainDistinctObject[objectKey][propertie]=[tempObject[propertie]]
+            mainDistinctObject[objectKey]['groupedObjectKey']=objectKey
+
+        }
+
+
+    })
+
+    const distinctObject=[]
+
+    for(const objectKey in mainDistinctObject){
+        mainDistinctObject[objectKey][propertie+'String']=mainDistinctObject[objectKey][propertie].toString().replace(',','/')
+        distinctObject.push(mainDistinctObject[objectKey])
+    }
+
+    return distinctObject
+
+}
 
 utils.getCsvAsArray = (filePath) => {
 
