@@ -10,7 +10,7 @@ utils.generateUniqueId = () => {
     return timestamp + random;
 }
 
-const deletePropertieFromObject = (obj,propertie) =>{
+utils.deletePropertieFromObject = (obj,propertie) =>{
     delete obj[propertie]
 
 }
