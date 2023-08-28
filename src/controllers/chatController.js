@@ -27,7 +27,7 @@ const getEmptyChatObject = () =>{
         recommendedProduct: '',  
         products:{
             raw:[],
-            groupped:[],
+            grouped:[],
             string:""
         },
         messages: []
@@ -66,15 +66,15 @@ const setChatProducts_Raw = (chatObject)=>{
     chatObject.products.raw= utils.getCsvAsArray(PRODUCSTS_PATH)
 }
 
-const setChatProducts_Groupped = (chatObject)=>{
-    chatObject.products.groupped=utils.getGroupPropertiesFromArrayOfObjects(chatObject.products.raw,[productsConfig.COLUMN_ID,productsConfig.COLUMN_COLOR])
-    utils.setSequencialIDToArrayOfObjects(chatObject.products.groupped,'!codigo',productsConfig.DISTINCT_ID_PREFIX)
+const setChatProducts_grouped = (chatObject)=>{
+    chatObject.products.grouped=utils.getGroupPropertiesFromArrayOfObjects(chatObject.products.raw,[productsConfig.COLUMN_ID,productsConfig.COLUMN_COLOR])
+    utils.setSequencialIDToArrayOfObjects(chatObject.products.grouped,'!codigo',productsConfig.DISTINCT_ID_PREFIX)
 
 }
 
 const setChatProducts_String = (chatObject)=>{
 
-    chatObject.products.string = [... chatObject.products.groupped]
+    chatObject.products.string = [... chatObject.products.grouped]
     utils.deletePropertieFromObject(chatObject.products.string,productsConfig.COLUMN_ID)
     utils.deletePropertieFromObject(chatObject.products.string,productsConfig.COLUMN_ID+'_Array')
     utils.deletePropertieFromObject(chatObject.products.string,productsConfig.COLUMN_COLOR+'_Array')
@@ -88,7 +88,7 @@ const setChatProducts_String = (chatObject)=>{
 const setChatProducts = (chatObject)=>{
 
     setChatProducts_Raw(chatObject)
-    setChatProducts_Groupped(chatObject) 
+    setChatProducts_grouped(chatObject) 
     setChatProducts_String(chatObject)
 
 }
