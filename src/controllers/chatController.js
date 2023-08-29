@@ -161,8 +161,26 @@ const getRecommendedGroupedProductMessage = async (chatObject) =>{
 
 }
 
+const getChatFilePathFromId = (chatId)=>{
+    return chatConfig.STORE_PATH+'/'+chatId+'.json'
+}
+
 const saveChat = async (req,res) =>{
 
+    const chatId = req.body.chatId
+    const chatObject = getChatById(chatId)
+    const filePath = getChatFilePathFromId(chatId)
+    utils.storeObjectAsJsonFile(chatObject,filePath)
+
+    res.status(200).json({chatId: chatId,filePath: filePath})
+
+}
+
+const loadSavedChat = async (req,res) =>{
+    const chatId = req.body.chatId
+    const filePath = getChatFilePathFromId(chatId)
+    const chatObject = utils.getJsonFileAsObject(filePath)
+    chatArray.push(chatObject)
 
 }
 
@@ -205,5 +223,6 @@ module.exports ={
     getChat,
     sendChatMessage,
     getRecommendedGroupedProduct,
-    saveChat
+    saveChat,
+    loadSavedChat
 }

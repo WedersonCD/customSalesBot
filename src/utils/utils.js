@@ -31,6 +31,12 @@ utils.storeObjectAsJsonFile = (object,filePath) =>{
     fs.writeFileSync(filePath, JSONContent, 'utf-8');
 }
 
+utils.getJsonFileAsObject = (filePath)=>{
+    const JSONContent = fs.readFileSync(filePath, 'utf-8');
+    return JSON.parse(JSONContent);
+
+}
+
 
 utils.getCopyOfArrayOfObjects= (array) =>{
 
