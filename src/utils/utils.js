@@ -24,6 +24,14 @@ utils.getDistinctArrayOfObjects = (array) =>{
     return distinctArray.map(obj =>JSON.parse(obj))
 }
 
+utils.storeObjectAsJsonFile = (object,filePath) =>{
+    
+    const JSONContent = JSON.stringify(object, null, 2);
+
+    fs.writeFileSync(filePath, JSONContent, 'utf-8');
+}
+
+
 utils.getCopyOfArrayOfObjects= (array) =>{
 
     return array.map(obj => {
