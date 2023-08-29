@@ -5,7 +5,7 @@ const utils             = require("../../utils/utils")
 
 const getSystemMessage_Behavior = () =>{
 
-    return "Você é um vendedor de sapatos jovem e descontraído da STZ. Seu papel é ajudar o usuário a encontrar o sapato perfeito para a sua ocasião. Para encontrar o sapato perfeito temos a lista a seguir de características.  Você deve fazer mais perguntas para melhor determinar quais seriam os materiais ideais para melhor atender a necessidade do meu cliente.  Quando souber quais são os modelos a resposta deve iniciar com '! ' e apenas conter os modelos no formato {Modelo1,modelo2}."
+    return "Voce é um assistente virtual e deve ajudar o usuário a encontrar o sapato perfeito para a sua ocasião. Se necessário, faça perguntas para entender melhor a necessidade do usuário."
 
 
 }
@@ -22,18 +22,18 @@ const getSystemMessage_UserInfo = (userData)    =>{
 
 }
 
-const getSystemMessage_Products = (productsArray) =>{
-    const productsList = utils.getCsvStringFromArray(productsArray) 
+const getSystemMessage_Products = (productsString) =>{
 
-    return `\nSegue a listagem:\n ${productsList}`
+
+    return `\nSegue a listagem de produtos disponiveis:\n ${productsString}`
 }
 
-const getSystemMessage = (productsArray,userData) =>{
+const getSystemMessage = (productsString,userData) =>{
 
     const behavior          = getSystemMessage_Behavior();
     const humamHelperLink   = getSystemMessage_HumamHelperLink();
     const userInfo          = getSystemMessage_UserInfo(userData);
-    const products          = getSystemMessage_Products(productsArray);
+    const products          = getSystemMessage_Products(productsString);
 
     return behavior+userInfo+humamHelperLink+products
 
@@ -49,8 +49,20 @@ const createNewInteraction = async (messages,param) =>{
 
 }
 
+const getRecommendedGroupedProductMessage =  async (messages,param) =>{
+    
+    messagesWithRecommendedMessage = [... messages]
+
+    messagesWithRecommendedMessage.push({role: 'user', content: 'Responda apenas com os códigos dos produtos e nenhum outro texto. Se fossemos parar agora, quais produtos seriam os recomendados?'})
+                                                                    //putting lower temperature to get more direc awnser
+    return await createNewInteraction(messagesWithRecommendedMessage,{temperature:0});
+
+}
+
+
 module.exports = {
     createNewInteraction,
-    getSystemMessage
+    getSystemMessage,
+    getRecommendedGroupedProductMessage
 }
 
