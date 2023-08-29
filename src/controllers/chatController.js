@@ -85,7 +85,6 @@ const setChatProducts_String = (chatObject)=>{
 
 }
 
-
 const setChatProducts = (chatObject)=>{
 
     setChatProducts_Raw(chatObject)
@@ -157,10 +156,19 @@ const sendChatMessage = async (req,res) =>{
     }
 
 }
-
 const getRecommendedGroupedProductFromChat = async (chatObject) =>{
+    return await smartBotController.getRecommendedGroupedProduct(chatObject.messages);
 
-    return  await   smartBotController.getRecommendedGroupedProduct(chatObject.messages)
+}
+
+
+const getRecommendedProductListFromChat = async (chatObject) =>{
+
+    const recommendedGroupProductMessage = await getRecommendedGroupedProductFromChat(chatObject);
+    const recommendedProducts = dumbBotController.recommendedGroupedProductMessage(chatObject,recommendedGroupProductMessage);
+
+
+    return await smartBotController.getRecommendedGroupedProduct(chatObject.messages)
 
 }
 
@@ -184,7 +192,6 @@ const getRecommendedGroupedProduct = async (req,res) =>{
 
 
 }
-
 
 
 
