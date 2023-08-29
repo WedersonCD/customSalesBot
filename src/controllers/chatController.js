@@ -181,6 +181,8 @@ const loadSavedChat = async (req,res) =>{
     const filePath = getChatFilePathFromId(chatId)
     const chatObject = utils.getJsonFileAsObject(filePath)
     chatArray.push(chatObject)
+    
+    res.status(200).json({chatId: chatId,filePath: filePath})
 
 }
 
