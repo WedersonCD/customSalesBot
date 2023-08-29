@@ -31,9 +31,11 @@ const getCsvAsArray = (filePath) => {
 
   const lines = csvData.split('\n');
   const headers = lines[0].replace('\r','').split(',');
-  console.log(headers[0].charCodeAt(0))
-  headers[0]=headers[0].slice(1)
-  console.log(headers[0].charCodeAt(0))
+
+  //If the first value is the character 'zero-width no-break space' he HAVE to be removed.
+  if(headers[0].charCodeAt(0)==65279){
+    headers[0]=headers[0].slice(1)
+  }
   
   const jsonArray = [];
   for (let i = 1; i < 2; i++) {
