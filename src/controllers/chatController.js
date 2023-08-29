@@ -24,7 +24,10 @@ const getEmptyChatObject = () =>{
             age: 0,
             gender: ""
         },
-        recommendedProduct: '',  
+        recommendedGroupedProduct: {
+            awnserFromSmartBot: '',
+            groupedProduct :{}
+        },  
         products:{
             raw:[],
             grouped:[],
@@ -68,7 +71,7 @@ const setChatProducts_Raw = (chatObject)=>{
 
 const setChatProducts_grouped = (chatObject)=>{
     chatObject.products.grouped=utils.getGroupPropertiesFromArrayOfObjects(chatObject.products.raw,[productsConfig.COLUMN_ID,productsConfig.COLUMN_COLOR])
-    utils.setSequencialIDToArrayOfObjects(chatObject.products.grouped,'!codigo',productsConfig.DISTINCT_ID_PREFIX)
+    utils.setSequencialIDToArrayOfObjects(chatObject.products.grouped,productsConfig.DISTINCT_ID_COLUMN,productsConfig.DISTINCT_ID_PREFIX)
 
 }
 
@@ -97,12 +100,6 @@ const setChatName = (chatObject)=>{
     chatObject.name     =   chatConfig.BOT_NAME;
 
 }
-
-const setChatRecommendedProduct = (chatObject,recommendedProduct)=>{
-    chatObject.recommendedProduct     =  recommendedProduct;
-
-}
-
 
 const createChat = async (req,res) =>{
 
@@ -186,13 +183,11 @@ const loadSavedChat = async (req,res) =>{
 
 }
 
-const getRecommendedGroupedProductFromChat = async (chatObject) =>{
 
-    const recommendedGroupProductMessage = await getRecommendedGroupedProductMessage(chatObject);
-    const recommendedProducts = dumbBotController.getRecommendedGroupedProductFromMessage(chatObject,recommendedGroupProductMessage);
-
-    console.log(recommendedProducts)
-
+const setRecommendedGroupedProductFromChat = async (chatObject) =>{
+    
+    chatObject.recommendedGroupedProduct.awnserFromSmartBot = await getRecommendedGroupedProductMessage(chatObject);
+    chatObject.recommendedGroupedProduct.groupedProduct     = dumbBotController.getRecommendedGroupedProductFromMessage(chatObject);
 
 }
 
@@ -204,9 +199,8 @@ const getRecommendedGroupedProduct = async (req,res) =>{
     chatObject = getChatById(chatId)
 
     try{
-        const recommendedProduct = await getRecommendedGroupedProductFromChat(chatObject);
-        setChatRecommendedProduct(chatObject,recommendedProduct)
-        res.status(200).json({chatId: chatId,recommendedProduct: recommendedProduct})
+        await setRecommendedGroupedProductFromChat(chatObject);
+        res.status(200).json({chatId: chatId,recommendedProduct: chatObject.recommendedGroupedProduct})
 
     }catch(error){
         console.log(error)

@@ -10,14 +10,14 @@ const getDefaultMessageInChatOpened = () =>{
 const getRecommendedGroupedProductIdFromMessage = (message)=>{
 
     const matchedObject = message.match(new RegExp(productsConfig.DISTINCT_ID_PREFIX+"(\\d+)"))
-
+    console.log(matchedObject)
     return matchedObject[0] || ''
 
 }
 
-const getRecommendedGroupedProductFromMessage = (chatObject,message)=>{
-    recommendedGroupedProductId = getRecommendedGroupedProductIdFromMessage(message)
-    return chatObject.products.grouped.filter((product)=>product[productsConfig.COLUMN_ID]===recommendedGroupedProductId)
+const getRecommendedGroupedProductFromMessage = (chatObject)=>{
+    recommendedGroupedProductId = getRecommendedGroupedProductIdFromMessage(chatObject.recommendedGroupedProduct.awnserFromSmartBot)
+    return chatObject.products.grouped.filter((product)=>product[productsConfig.DISTINCT_ID_COLUMN]==recommendedGroupedProductId)
 
 }
 

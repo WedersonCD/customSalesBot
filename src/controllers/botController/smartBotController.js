@@ -53,9 +53,9 @@ const getRecommendedGroupedProductMessage =  async (messages,param) =>{
     
     messagesWithRecommendedMessage = [... messages]
 
-    messagesWithRecommendedMessage.push({role: 'user', content: 'Responda apenas com o código do produto e nenhum outro texto. Se fossemos parar agora, qual produto seria recomendado?'})
-
-    return await createNewInteraction(messagesWithRecommendedMessage);
+    messagesWithRecommendedMessage.push({role: 'user', content: 'Responda apenas com os códigos dos produtos e nenhum outro texto. Se fossemos parar agora, quais produtos seriam os recomendados?'})
+                                                                    //putting lower temperature to get more direc awnser
+    return await createNewInteraction(messagesWithRecommendedMessage,{temperature:0.2});
 
 }
 
