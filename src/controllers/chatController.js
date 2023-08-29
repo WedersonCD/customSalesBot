@@ -10,6 +10,19 @@ const PRODUCSTS_PATH='../data/products.csv';
 
 const chatArray =[]
 
+
+const getEmptyRecommendationObject = () =>{
+    return            {
+        createdAt:utils.getCurrentTimesTamp(),
+        lastInteration: 0,
+        awnserFromSmartBot: '',
+        groupedProductsId: [],
+        groupedProducts: [],
+        products:[]
+
+    }
+}
+
 const getEmptyChatObject = () =>{
     
     return {
@@ -24,10 +37,7 @@ const getEmptyChatObject = () =>{
             age: 0,
             gender: ""
         },
-        recommendedGroupedProduct: {
-            awnserFromSmartBot: '',
-            groupedProduct :{}
-        },  
+        recommendations: [],
         products:{
             raw:[],
             grouped:[],
@@ -153,11 +163,6 @@ const sendChatMessage = async (req,res) =>{
     }
 
 }
-const getRecommendedGroupedProductMessage = async (chatObject) =>{
-    return await smartBotController.getRecommendedGroupedProductMessage(chatObject.messages);
-
-}
-
 const getChatFilePathFromId = (chatId)=>{
     return chatConfig.STORE_PATH+'/'+chatId+'.json'
 }
@@ -183,33 +188,88 @@ const loadSavedChat = async (req,res) =>{
 
 }
 
+const setChatProductRecommendation = (chatObject,recommendation) =>{
+    chatObject.recommendations.push(recommendation)
 
-const setRecommendedGroupedProductFromChat = async (chatObject) =>{
-    
-    chatObject.recommendedGroupedProduct.awnserFromSmartBot = await getRecommendedGroupedProductMessage(chatObject);
-    chatObject.recommendedGroupedProduct.groupedProduct     = dumbBotController.getRecommendedGroupedProductFromMessage(chatObject);
+}
+
+const getRecommendedGroupedProductFromId = (chatObject,recommendedGroupedProductId)=>{
+    const recommendedGroupedProduct= chatObject.products.grouped.filter((product)=>product[productsConfig.DISTINCT_ID_COLUMN]==recommendedGroupedProductId)
+    return recommendedGroupedProduct[0]
+
+}
+
+const setRecommendationLastInteration = (recommendationObject,chatObject)=>{
+
+    recommendationObject.lastInteration     = chatObject.totalIterations
 
 }
 
 
-const getRecommendedGroupedProduct = async (req,res) =>{
+const setRecommendationAwnserFromSmartBot = async (recommendationObject,chatObject) =>{
     
-    const chatId = req.query.chatId
+    //if the last message is a recomendation it is used otherwise get a pure recommendation from the smartBot
+    const lastMessage=chatObject.messages[chatObject.messages.length-1].content
+    if(dumbBotController.MessageHaveAtLeastOneProductRecomendation(lastMessage)){
+        recommendationObject.awnserFromSmartBot = lastMessage;
 
-    chatObject = getChatById(chatId)
+    }else{
+        recommendationObject.awnserFromSmartBot = await smartBotController.getRecommendedGroupedProductMessage(chatObject.messages);
 
-    try{
-        await setRecommendedGroupedProductFromChat(chatObject);
-        res.status(200).json({chatId: chatId,recommendedProduct: chatObject.recommendedGroupedProduct})
+    }
 
+
+}
+
+const setRecommendationGroupedProductsId = async (recommendationObject) =>{
+    recommendationObject.groupedProductsId  = dumbBotController.getRecommendedGroupedProductIdArrayFromMessage(recommendationObject.awnserFromSmartBot);
+
+}
+
+const setRecommendationGroupedProducts = (recommendationObject,chatObject)=>{
+    recommendationObject.groupedProducts = recommendationObject.groupedProductsId.map((id)=>{
+        return getRecommendedGroupedProductFromId(chatObject,id)
+    })
+
+}
+const getChatRawProductFromIdArray = (chatObject,productIdArray)=>{
+
+    
+    const rawProduct=chatObject.products.raw.filter((product)=>productIdArray.includes(product[productsConfig.COLUMN_ID]))
+    return rawProduct
+}
+
+const setRecommendationProducts = (recommendationObject,chatObject) =>{
+
+    recommendationObject.products = recommendationObject.groupedProducts.map((groupedProduct)=>{
+        return getChatRawProductFromIdArray(chatObject,groupedProduct[productsConfig.COLUMN_ID+'_Array'])
+    })
+}
+
+const getProductRecommendation = async (req,res) =>{
+
+    try {
+        const chatId = req.query.chatId
+        const chatObject             = getChatById(chatId)
+        const recommendationObject   = getEmptyRecommendationObject();
+        chatObject.status='getting recomendation'
+        setRecommendationLastInteration(recommendationObject,chatObject)
+        await setRecommendationAwnserFromSmartBot(recommendationObject,chatObject)
+        setRecommendationGroupedProductsId(recommendationObject,chatObject)
+        setRecommendationGroupedProducts(recommendationObject,chatObject)
+        setRecommendationProducts(recommendationObject,chatObject)   
+        setChatProductRecommendation(chatObject,recommendationObject)
+        chatObject.status='waiting'
+        res.status(200).json(recommendationObject)
+        
     }catch(error){
         console.log(error)
         res.status(500).json({error: error})
 
     }
 
-
 }
+
 
 
 
@@ -217,7 +277,7 @@ module.exports ={
     createChat,
     getChat,
     sendChatMessage,
-    getRecommendedGroupedProduct,
+    getProductRecommendation,
     saveChat,
     loadSavedChat
 }

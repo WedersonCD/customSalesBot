@@ -7,24 +7,43 @@ const getDefaultMessageInChatOpened = () =>{
 }
 
 
-const getRecommendedGroupedProductIdFromMessage = (message)=>{
 
-    const matchedObject = message.match(new RegExp(productsConfig.DISTINCT_ID_PREFIX+"(\\d+)"))
-    console.log(matchedObject)
+const getRecommendedGroupedProductIdFromMessage = (message)=>{
+    matchedObject = message.match(new RegExp(productsConfig.DISTINCT_ID_PREFIX+"(\\d+)"))
+    matchedObject = matchedObject || [] 
+
     return matchedObject[0] || ''
 
 }
 
-const getRecommendedGroupedProductFromMessage = (chatObject)=>{
-    recommendedGroupedProductId = getRecommendedGroupedProductIdFromMessage(chatObject.recommendedGroupedProduct.awnserFromSmartBot)
-    return chatObject.products.grouped.filter((product)=>product[productsConfig.DISTINCT_ID_COLUMN]==recommendedGroupedProductId)
-
+const MessageHaveAtLeastOneProductRecomendation = (message) =>{
+    tratedMessed = getRecommendedGroupedProductIdFromMessage(message)
+    return tratedMessed && tratedMessed.length>1
 }
 
 
+const getRecommendedGroupedProductIdArrayFromMessage = (message)=>{
+
+
+    const recommendedGroupedProductIdArray = []
+
+    tratedMessage = message
+    groupedProductId = getRecommendedGroupedProductIdFromMessage(tratedMessage)
+
+    while(groupedProductId!=''){
+        recommendedGroupedProductIdArray.push(groupedProductId)
+        tratedMessage=tratedMessage.replace(groupedProductId,'')
+        groupedProductId = getRecommendedGroupedProductIdFromMessage(tratedMessage)
+    }
+
+    return recommendedGroupedProductIdArray;
+
+}
+
 module.exports = {
     getDefaultMessageInChatOpened,
-    getRecommendedGroupedProductFromMessage
+    getRecommendedGroupedProductIdArrayFromMessage,
+    MessageHaveAtLeastOneProductRecomendation
 }
 
 
