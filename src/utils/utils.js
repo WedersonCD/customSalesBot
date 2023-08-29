@@ -1,5 +1,5 @@
 const fs = require('fs');
-
+const path = require('path')
 
 const utils ={}
 
@@ -28,10 +28,11 @@ utils.storeObjectAsJsonFile = (object,filePath) =>{
     
     const JSONContent = JSON.stringify(object, null, 2);
 
-    fs.writeFileSync(filePath, JSONContent, 'utf-8');
+    fs.writeFileSync(filePath, JSONContent);
 }
 
 utils.getJsonFileAsObject = (filePath)=>{
+    
     const JSONContent = fs.readFileSync(filePath, 'utf-8');
     return JSON.parse(JSONContent);
 

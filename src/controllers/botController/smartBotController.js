@@ -5,7 +5,7 @@ const utils             = require("../../utils/utils")
 
 const getSystemMessage_Behavior = () =>{
 
-    return "Seu papel é ajudar o usuário a encontrar o sapato perfeito para a sua ocasião. Se necessário, faça perguntas para entender melhor a necessidade do usuário."
+    return "Voce é um assistente virtual e deve ajudar o usuário a encontrar o sapato perfeito para a sua ocasião. Se necessário, faça perguntas para entender melhor a necessidade do usuário."
 
 
 }
@@ -25,7 +25,7 @@ const getSystemMessage_UserInfo = (userData)    =>{
 const getSystemMessage_Products = (productsString) =>{
 
 
-    return `\nSegue a listagem:\n ${productsString}`
+    return `\nSegue a listagem de produtos disponiveis:\n ${productsString}`
 }
 
 const getSystemMessage = (productsString,userData) =>{
