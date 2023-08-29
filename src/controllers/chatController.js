@@ -233,10 +233,9 @@ const setRecommendationGroupedProducts = (recommendationObject,chatObject)=>{
 
 }
 const getChatRawProductFromIdArray = (chatObject,productIdArray)=>{
-
-    
     const rawProduct=chatObject.products.raw.filter((product)=>productIdArray.includes(product[productsConfig.COLUMN_ID]))
     return rawProduct
+    
 }
 
 const setRecommendationProducts = (recommendationObject,chatObject) =>{
