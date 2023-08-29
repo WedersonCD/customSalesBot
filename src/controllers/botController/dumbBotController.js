@@ -24,7 +24,7 @@ const getRecommendedGroupedProductFromMessage = (chatObject,message)=>{
 
 module.exports = {
     getDefaultMessageInChatOpened,
-    getRecommendedProductListFromMessage
+    getRecommendedGroupedProductFromMessage
 }
 
 

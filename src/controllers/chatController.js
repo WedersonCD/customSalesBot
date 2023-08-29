@@ -156,19 +156,19 @@ const sendChatMessage = async (req,res) =>{
     }
 
 }
-const getRecommendedGroupedProductFromChat = async (chatObject) =>{
-    return await smartBotController.getRecommendedGroupedProduct(chatObject.messages);
+const getRecommendedGroupedProductMessage = async (chatObject) =>{
+    return await smartBotController.getRecommendedGroupedProductMessage(chatObject.messages);
 
 }
 
 
-const getRecommendedProductListFromChat = async (chatObject) =>{
+const getRecommendedGroupedProductFromChat = async (chatObject) =>{
 
-    const recommendedGroupProductMessage = await getRecommendedGroupedProductFromChat(chatObject);
-    const recommendedProducts = dumbBotController.recommendedGroupedProductMessage(chatObject,recommendedGroupProductMessage);
+    const recommendedGroupProductMessage = await getRecommendedGroupedProductMessage(chatObject);
+    const recommendedProducts = dumbBotController.getRecommendedGroupedProductFromMessage(chatObject,recommendedGroupProductMessage);
 
+    console.log(recommendedProducts)
 
-    return await smartBotController.getRecommendedGroupedProduct(chatObject.messages)
 
 }
 

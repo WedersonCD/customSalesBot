@@ -49,7 +49,7 @@ const createNewInteraction = async (messages,param) =>{
 
 }
 
-const getRecommendedGroupedProduct =  async (messages,param) =>{
+const getRecommendedGroupedProductMessage =  async (messages,param) =>{
     
     messagesWithRecommendedMessage = [... messages]
 
@@ -63,6 +63,6 @@ const getRecommendedGroupedProduct =  async (messages,param) =>{
 module.exports = {
     createNewInteraction,
     getSystemMessage,
-    getRecommendedGroupedProduct
+    getRecommendedGroupedProductMessage
 }
 
