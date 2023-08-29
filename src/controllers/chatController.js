@@ -161,6 +161,11 @@ const getRecommendedGroupedProductMessage = async (chatObject) =>{
 
 }
 
+const saveChat = async (req,res) =>{
+
+
+}
+
 
 const getRecommendedGroupedProductFromChat = async (chatObject) =>{
 
@@ -199,5 +204,6 @@ module.exports ={
     createChat,
     getChat,
     sendChatMessage,
-    getRecommendedGroupedProduct
+    getRecommendedGroupedProduct,
+    saveChat
 }
