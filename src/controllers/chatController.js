@@ -128,7 +128,7 @@ const createChat = async (req,res) =>{
     
     chatArray.push(chatObject)
 
-    res.status(200).json({chatId: chatObject.id,defaultMessage: defaultMessage})
+    res.status(200).json({chatId: chatObject.id,message: defaultMessage})
 
 }
 
