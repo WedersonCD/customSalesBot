@@ -1,5 +1,5 @@
 
-const OPEN_IA_SECRET_KEY = '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';
+const OPEN_IA_SECRET_KEY = '';
 const OPEN_IA_ORGANIZATION_ID='org-DcCBYIlOD6cf96VFX2fmRzpq';
 
 const OPEN_IA_API_CONFIGURATION= {

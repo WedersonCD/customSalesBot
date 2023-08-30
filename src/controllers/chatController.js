@@ -239,9 +239,11 @@ const getChatRawProductFromIdArray = (chatObject,productIdArray)=>{
 }
 
 const setRecommendationProducts = (recommendationObject,chatObject) =>{
-
-    recommendationObject.products = recommendationObject.groupedProducts.map((groupedProduct)=>{
-        return getChatRawProductFromIdArray(chatObject,groupedProduct[productsConfig.COLUMN_ID+'_Array'])
+    
+    recommendationObject.groupedProducts.forEach((groupedProduct)=>{
+        getChatRawProductFromIdArray(chatObject,groupedProduct[productsConfig.COLUMN_ID+'_Array']).forEach(product=>{
+            recommendationObject.products.push(product)
+        })
     })
 }
 

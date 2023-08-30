@@ -9,11 +9,6 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
-io.on('connection', (socket) => {
-  socket.on('chat message', msg => {
-    io.emit('chat message', msg);
-  });
-});
 
 http.listen(port, () => {
   console.log(`Socket.IO server running at http://localhost:${port}/`);
@@ -35,16 +30,28 @@ io.on('connection', async (socket) => {
         socket.emit('chat awnser',response.data.message)
         return response.data.chatId
     })
+
     console.log(chatId)
     socket.on('chat question', async (msg) => {
+
         const awnser = await axios.post(mainURL+'sendChatMessage',{
             "chatId":chatId,
             "message":msg
         })
         .then((response)=>{
-        socket.emit('chat awnser',response.data.awnser)
+            socket.emit('chat awnser',response.data.awnser)
+        })
 
+        const recommendatedProduct = axios.get(  mainURL+'productRecommendation?chatId='+chatId).then((response)=>{
+            console.log('recomendation maded')
+            socket.emit('chat recommendedProduct',response.data.products)
         })
         
     });
+
+    socket.on('chat save',()=>{
+        axios.post(mainURL+'saveChat',{
+            "chatId":chatId
+        })
+    })
   });
