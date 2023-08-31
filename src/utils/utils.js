@@ -1,7 +1,12 @@
 const fs = require('fs');
-const path = require('path')
+const path = require('path');
+const similarity = require('compute-cosine-similarity')
 
 const utils ={}
+
+utils.similarityBetweenEmbeddings = (embedding_1,embedding_2) => {
+    return similarity(embedding_1,embedding_2)
+}
 
 //Generate unique Ids
 utils.generateUniqueId = () => {
@@ -38,6 +43,15 @@ utils.getJsonFileAsObject = (filePath)=>{
 
 }
 
+utils.getTheGratestValue = (a,b) =>{
+    return b-a
+    
+}
+
+utils.getFirstItensFromArray = (array,n) =>{
+    return array.slice(0,n)
+
+}
 
 utils.getCopyOfArrayOfObjects= (array) =>{
 

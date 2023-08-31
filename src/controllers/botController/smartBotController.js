@@ -1,6 +1,5 @@
 const chatConfig        = require("../../configs/chatConfig")
-const chatGPTService    = require('../../services/chatGPTService')
-const utils             = require("../../utils/utils")
+const openAIService    = require('../../services/openAIService')
 
 
 const getSystemMessage_Behavior = () =>{
@@ -42,7 +41,7 @@ const getSystemMessage = (productsString,userData) =>{
 
 const createNewInteraction = async (messages,param) =>{
 
-    const completion = await chatGPTService.getNewChatCompletion(messages,param)
+    const completion = await openAIService.getNewChatCompletion(messages,param)
     const awnser = completion.choices[0].message.content;
 
     return  awnser;

@@ -3,6 +3,8 @@ const app = express();
 
 const serverConfig = require('./configs/serverConfig');
 const chatRoute = require('./routes/chatRoute')
+const productRoute = require('./routes/productRoute')
+
 
 
 
@@ -21,3 +23,4 @@ const port      = serverConfig.SERVER_PORT;
 
 app.use(express.json());
 app.use('/', chatRoute);
+app.use('/product',productRoute)
