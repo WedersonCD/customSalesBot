@@ -1,7 +1,8 @@
 const OpenAI = require('openai')
 const fs = require('fs')
+const similarity = require('compute-cosine-similarity')
 
-const OPEN_IA_SECRET_KEY = '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';
+const OPEN_IA_SECRET_KEY = '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';
 const OPEN_IA_ORGANIZATION_ID='org-DcCBYIlOD6cf96VFX2fmRzpq';
 
 const OPEN_IA_API_CONFIGURATION= {
@@ -17,16 +18,18 @@ async function main() {
   const embeddings = await openai.embeddings.create({
     model: 'text-embedding-ada-002',
     input: [
-      "Women,Casual,Sandals,Slip-Ons,Zipper,EVA,White",
-      "Women,Casual,Sneakers,High-Tops,Lace-up,Leather,Blue"
+      "apostas de e-sport",
+      "travesti comendo cachorro quente no rio de janeiro enquanto de prostitui"
     ]
     });
 
-//  console.log(embeddings.data);
+  console.log(embeddings);
+
+  console.log(similarity(embeddings.data[0].embedding,embeddings.data[1].embedding))
   
 }
 
-const getCsvAsArray = (filePath) => {
+const getCsvAsArray = (filePath) => {     
   const csvData = fs.readFileSync(filePath, 'utf-8');
 
   const lines = csvData.split('\n');
@@ -51,5 +54,5 @@ const getCsvAsArray = (filePath) => {
 
 }
 
-//main();
-console.log(getCsvAsArray('./data/products.csv'))
+main();
+//console.log(getCsvAsArray('./data/products.csv'))

@@ -139,7 +139,7 @@ const loadProductsBase = async (req,res)=>{
     try{
         setRawProducts()
         setGroupedProductsFromFile()
-        res.status(200).json({works:'ok'})
+        res.status(200).json(products)
 
     }catch(error){
         console.log(error)

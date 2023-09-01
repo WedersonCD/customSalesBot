@@ -94,15 +94,16 @@ const setChatProducts_String = (chatObject) => {
 
 const setChatProducts_GroupedFromRandomSample = (chatObject) => {
 
-    chatObject.product.grouped = productController.getRandomSampleOfGroupedProducts(0.3)
+    chatObject.products.grouped = productController.getRandomSampleOfGroupedProducts(0.3)
 
+    console.log('----->',productController.getRandomSampleOfGroupedProducts(0.3))
 }
 
 const setChatProducts_RawFromGroupedProducts = (chatObject) => {
 
     const rawProductIdArray = []
 
-    chatObject.product.grouped.forEach((groupedProduct) => {
+    chatObject.products.grouped.forEach((groupedProduct) => {
         groupedProduct[productsConfig.COLUMN_ID].forEach((id) => {
             rawProductIdArray.push(id)
         })
