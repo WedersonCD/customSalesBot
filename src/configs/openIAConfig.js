@@ -1,7 +1,7 @@
 
 const openAiConfig = {};
 
-openAiConfig.SECRET_KEY = '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';
+openAiConfig.SECRET_KEY = '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';
 openAiConfig.ORGANIZATION_ID='org-DcCBYIlOD6cf96VFX2fmRzpq';
 
 openAiConfig.API_CONFIGURATION= {

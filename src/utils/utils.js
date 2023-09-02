@@ -96,7 +96,6 @@ utils.setSequencialIDToArrayOfObjects = (array,idName,idPrefix) =>{
 
 utils.getGroupPropertiesFromArrayOfObjects = (array, properties)=>{
 
-
     const mainDistinctObject={}
 
     array.forEach((obj)=>{

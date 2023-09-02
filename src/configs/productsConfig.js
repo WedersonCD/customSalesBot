@@ -1,7 +1,7 @@
 const productsConfig = {}
 
 productsConfig.FILE_NAME='products';
-productsConfig.COLUMN_ID='ean';
+productsConfig.COLUMN_ID='SKU';
 productsConfig.COLUMN_COLOR='Cor';
 productsConfig.DISTINCT_ID_PREFIX='P_';
 productsConfig.DISTINCT_ID_COLUMN='!codigo';

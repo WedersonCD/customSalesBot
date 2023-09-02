@@ -11,7 +11,6 @@ const products={
 
 
 const getRawProducts = ()=>{
-
     return utils.getCsvAsArray(PRODUCSTS_PATH)
 
 }
@@ -23,23 +22,24 @@ const getRawProductFromIdArray = (productIdArray)=>{
     
 }
 
-const getGroupedProductsFromRawProduct = (rawProduct)=>{
-    groupedProduct=utils.getGroupPropertiesFromArrayOfObjects(rawProduct,[productsConfig.COLUMN_ID,productsConfig.COLUMN_COLOR])
+const getGroupedProductsFromRawProduct = ()=>{
+
+    const groupedProduct=utils.getGroupPropertiesFromArrayOfObjects(products.raw,[productsConfig.COLUMN_ID,productsConfig.COLUMN_COLOR])
     //utils.setSequencialIDToArrayOfObjects(groupedProduct,productsConfig.DISTINCT_ID_COLUMN,productsConfig.DISTINCT_ID_PREFIX)
 
     return groupedProduct
 }
 
-const saveGroupedProducts = (groupedProduct)=>{
-    utils.storeObjectAsJsonFile(groupedProduct,productsConfig.STORE_PATH+'/groupedProducts.json')
+const saveGroupedProducts = ()=>{
+    utils.storeObjectAsJsonFile(products.grouped,productsConfig.STORE_PATH+'/groupedProducts.json')
 
 }
 
-const getGroupedProductsEmbedding = async (groupedProducts)=>{
+const getGroupedProductsEmbedding = async ()=>{
     
     const embeddingInputs =[] 
 
-    groupedProducts.forEach(groupedProduct=>{
+    products.grouped.forEach(groupedProduct=>{
         embeddingInputs.push(groupedProduct.groupedObjectKey.replaceAll('"','').replaceAll('{','').replaceAll('}','').replaceAll(',',', ').replaceAll(':',': '))
     })
 
@@ -93,7 +93,6 @@ const getMoreSimilarGroupedProducts = (groupedProduct,qtd) =>{
 
 const teste = async (req,res)=>{
     const groupedProducts = getGroupedProducts();
-    console.log(groupedProducts.length)
     groupedProductPrincipal=groupedProducts[0]
         groupedProducts.forEach(groupedProductComparaded=>{
             similarity =utils.similarityBetweenEmbeddings(groupedProductPrincipal.embeddings,groupedProductComparaded.embeddings)
@@ -110,7 +109,7 @@ const setRawProducts = ()=>{
 }
 
 const setGroupedProducts =()=>{
-    products.grouped = getGroupedProductsFromRawProduct(products.rawProduct)
+    products.grouped = getGroupedProductsFromRawProduct()
 }
 
 const setGroupedProductsFromFile =()=>{
@@ -121,10 +120,10 @@ const setGroupedProductsFromFile =()=>{
 const generateGroupedProductsBase = async (req,res)=>{
 
     try{
-        products.raw =getRawProducts()
+        setRawProducts()
         setGroupedProducts()
         await setGroupedProductsEmbeddings()
-        saveGroupedProducts(groupedProducts)
+        saveGroupedProducts()
         res.status(200).json({works:'ok'})
 
     }catch(error){

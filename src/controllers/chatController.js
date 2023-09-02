@@ -7,7 +7,7 @@ const productController = require('./productController')
 const utils = require("../utils/utils")
 
 
-const PRODUCSTS_PATH = '../data/products.csv';
+const PRODUCSTS_PATH = '../data/products/products.csv';
 
 const chatArray = []
 
@@ -59,7 +59,6 @@ const setChatMessage = (chat, role, message) => {
 
 
 const getChatById = (chatId) => {
-
     return chatArray.filter((chat) => chat.id == chatId)[0]
 
 }
@@ -87,16 +86,15 @@ const setChatProducts_String = (chatObject) => {
     utils.deletePropertieFromObjectsInArray(chatObject.products.string, productsConfig.COLUMN_COLOR)
     utils.deletePropertieFromObjectsInArray(chatObject.products.string, productsConfig.COLUMN_COLOR + '_Array')
     utils.deletePropertieFromObjectsInArray(chatObject.products.string, 'groupedObjectKey')
-
+    utils.deletePropertieFromObjectsInArray(chatObject.products.string, 'embeddings')
     chatObject.products.string = utils.getCsvStringFromArray(chatObject.products.string)
 
 }
 
 const setChatProducts_GroupedFromRandomSample = (chatObject) => {
 
-    chatObject.products.grouped = productController.getRandomSampleOfGroupedProducts(0.3)
-
-    console.log('----->',productController.getRandomSampleOfGroupedProducts(0.3))
+    chatObject.products.grouped = productController.getRandomSampleOfGroupedProducts(0.6)
+    utils.setSequencialIDToArrayOfObjects(chatObject.products.grouped,productsConfig.DISTINCT_ID_COLUMN,productsConfig.DISTINCT_ID_PREFIX)
 }
 
 const setChatProducts_RawFromGroupedProducts = (chatObject) => {
@@ -104,14 +102,12 @@ const setChatProducts_RawFromGroupedProducts = (chatObject) => {
     const rawProductIdArray = []
 
     chatObject.products.grouped.forEach((groupedProduct) => {
-        groupedProduct[productsConfig.COLUMN_ID].forEach((id) => {
+        groupedProduct[productsConfig.COLUMN_ID+'_Array'].forEach((id) => {
             rawProductIdArray.push(id)
         })
     })
 
     chatObject.products.raw = productController.getRawProductFromIdArray(rawProductIdArray)
-
-
 }
 
 const setChatProductsInitial = (chatObject) => {
@@ -187,6 +183,7 @@ const saveChat = async (req, res) => {
 
     const chatId = req.body.chatId
     const chatObject = getChatById(chatId)
+    console.log(chatObject.id)
     const filePath = getChatFilePathFromId(chatId)
     utils.storeObjectAsJsonFile(chatObject, filePath)
 
@@ -233,7 +230,6 @@ const setRecommendationAwnserFromSmartBot = async (recommendationObject, chatObj
         recommendationObject.awnserFromSmartBot = await smartBotController.getRecommendedGroupedProductMessage(chatObject.messages);
 
     }
-
 
 }
 
