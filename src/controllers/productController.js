@@ -1,5 +1,5 @@
 
-const PRODUCSTS_PATH    ='../data/products.csv';
+const PRODUCSTS_PATH    ='../data/products/products.csv';
 const utils             = require("../utils/utils")
 const productsConfig    = require("../configs/productsConfig")
 const openAIService    = require('../services/openAIService')
