@@ -1,7 +1,7 @@
 const app = require('express')();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
-const port = process.env.PORT || 3050;
+const port = process.env.PORT || 3150;
 const axios = require('axios')
 
 
@@ -14,7 +14,7 @@ http.listen(port, () => {
   console.log(`Socket.IO server running at http://localhost:${port}/`);
 });
 
-const mainURL='http://localhost:3000/'
+const mainURL='http://0.0.0.0:3000/'
 
 
 io.on('connection', async (socket) => {

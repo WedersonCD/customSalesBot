@@ -27,14 +27,14 @@ const getSystemMessage_Products = (productsString) =>{
     return `\nSegue a listagem de produtos disponiveis:\n ${productsString}`
 }
 
-const getSystemMessage = (productsString,userData) =>{
+const getSystemMessage = (productsString) =>{
 
     const behavior          = getSystemMessage_Behavior();
     const humamHelperLink   = getSystemMessage_HumamHelperLink();
-    const userInfo          = getSystemMessage_UserInfo(userData);
+    //const userInfo          = getSystemMessage_UserInfo(userData);
     const products          = getSystemMessage_Products(productsString);
 
-    return behavior+userInfo+humamHelperLink+products
+    return behavior+humamHelperLink+products
 
 
 }

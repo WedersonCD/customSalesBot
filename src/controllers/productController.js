@@ -68,8 +68,18 @@ const getRandomSampleOfGroupedProducts = (probabilityOfGetGroupedProduct)=>{
 
 }
 
-const getMoreSimilarGroupedProducts = (groupedProduct,qtd) =>{
+const getGroupedProductsFromId = (groupedProductId)=>{
+    groupedIdArray = products.grouped.filter(value=>{
+        return value[productsConfig.DISTINCT_ID_COLUMN]==groupedProductId
+    })
 
+    return groupedIdArray[0]
+
+}
+
+
+const getMoreSimilarGroupedProductsIds = (groupedProductId,qtd) =>{
+    const groupedProduct= getGroupedProductsFromId(groupedProductId)
     const groupedProducts = getGroupedProducts();
 
     const arrayWithSimilarity = groupedProducts.map(groupedProductComparaded=>{
@@ -79,14 +89,12 @@ const getMoreSimilarGroupedProducts = (groupedProduct,qtd) =>{
             similarity:         utils.similarityBetweenEmbeddings(groupedProduct.embeddings,groupedProductComparaded.embeddings)
         }
     })
-
     arrayWithSimilarity.sort((a,b)=>{
         return b.similarity - a.similarity
     })
 
     const filteredAray =arrayWithSimilarity.filter((value,index)=>index<qtd) 
-
-    return filteredAray.map(value=>value.groupedProducts)
+    return filteredAray.map(value=>value.groupedProducts[productsConfig.DISTINCT_ID_COLUMN])
 
 }
 
@@ -117,12 +125,19 @@ const setGroupedProductsFromFile =()=>{
 
 }
 
+const setGroupedProductsId = ()=>{
+    utils.setSequencialIDToArrayOfObjects(products.grouped,productsConfig.DISTINCT_ID_COLUMN,productsConfig.DISTINCT_ID_PREFIX)
+
+}
+
 const generateGroupedProductsBase = async (req,res)=>{
 
     try{
         setRawProducts()
         setGroupedProducts()
         await setGroupedProductsEmbeddings()
+        setGroupedProductsId()
+
         saveGroupedProducts()
         res.status(200).json({works:'ok'})
 
@@ -149,9 +164,10 @@ const loadProductsBase = async (req,res)=>{
 module.exports = {
     generateGroupedProductsBase,
     getGroupedProducts,
-    getMoreSimilarGroupedProducts,
+    getMoreSimilarGroupedProductsIds,
     getRandomSampleOfGroupedProducts,
     getRawProductFromIdArray,
     loadProductsBase,
+    getGroupedProductsFromId,
     teste
 }

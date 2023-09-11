@@ -23,7 +23,6 @@ async function main() {
     ]
     });
 
-  console.log(embeddings);
 
   console.log(similarity(embeddings.data[0].embedding,embeddings.data[1].embedding))
   
@@ -55,4 +54,3 @@ const getCsvAsArray = (filePath) => {
 }
 
 main();
-//console.log(getCsvAsArray('./data/products.csv'))
