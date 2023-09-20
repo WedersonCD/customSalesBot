@@ -10,6 +10,6 @@ router.get('/productRecommendation',chatController.getProductRecommendation)
 router.post('/saveChat',chatController.saveChat)
 router.post('/loadSavedChat',chatController.loadSavedChat)
 router.post('/setChatProductFromRecommendation',chatController.setChatProductFromRecommendation)
-router.get('/chatCost',chatControllet.getChatCost)
+router.get('/chatCost',chatController.getChatCost)
 
 module.exports = router;

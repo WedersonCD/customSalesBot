@@ -21,16 +21,8 @@ const getEmptyRecommendationObject = () => {
         groupedProductsIdFromAwnser: [],
         groupedProductsId: [],
         groupedProducts: [],
-        products: [],
-        usage:{
-            total:{
-                tokens:0,
-                inputTokens:0,
-                outputTokens:0,
-                cost:0
-            },
-            interactions: []
-        }
+        products: []
+
 
     }
 }
@@ -55,7 +47,16 @@ const getEmptyChatObject = () => {
             grouped: [],
             string: ""
         },
-        messages: []
+        messages: [],
+        usage:{
+            total:{
+                tokens:0,
+                inputTokens:0,
+                outputTokens:0,
+                cost:0
+            },
+            interactions: []
+        }
     }
 
 }
@@ -352,7 +353,6 @@ const getChatCost = async(req,res)=>{
         res.status(500).json({error: error})
     }
 }
-getChatCost
 
 module.exports = {
     createChat,
