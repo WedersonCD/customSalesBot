@@ -163,8 +163,20 @@ const addChatInteraction = (chatObject) => {
 
 }
 
-const setChatUSage = (chatObject,usage)=>{
+const setChatCost =(chatObject)=>{
 
+
+}
+
+
+
+const setChatUsage = (chatObject,usage)=>{
+
+    chatObject.usage.interactions.push(usage)
+    chatObject.usage.total.tokens+=usage.total_tokens
+    chatObject.usage.total.inputTokens+=usage.prompt_tokens
+    chatObject.usage.total.outputTokens+=usage.completion_tokens
+    setChatCost(chatObject)
 
 }
 

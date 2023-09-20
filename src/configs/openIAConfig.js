@@ -12,6 +12,11 @@ openAiConfig.API_CONFIGURATION= {
 openAiConfig.DEFAULT_CHAT_MODEL = 'gpt-4';
 openAiConfig.DEFAULT_EMBEDDING_MODEL = 'text-embedding-ada-002';
 
+openAiConfig.MODEL_COST_INPUT=0.03
+openAiConfig.MODEL_COST_OUPUT=0.06
+openAiConfig.MODEL_COST_TOKENS_DIVIDER=1000
+
+
 openAiConfig.DEFAULT_TEMPERATURE=1
 openAiConfig.DEFAULT_MAX_TOKENS=256
 openAiConfig.DEFAULT_STREAM=false
