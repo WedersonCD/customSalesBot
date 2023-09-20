@@ -18,7 +18,7 @@ const getNewChatCompletion = async (messages,params) =>{
 }
 
 const getEmbeddigns = async (textArray,params) =>{
-
+    console.log(textArray)
     params = params || {}
     params.model = params.model || openIAConfig.DEFAULT_EMBEDDING_MODEL
 

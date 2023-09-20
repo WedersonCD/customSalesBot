@@ -24,8 +24,9 @@ const getRawProductFromIdArray = (productIdArray)=>{
 
 const getGroupedProductsFromRawProduct = ()=>{
 
-    const groupedProduct=utils.getGroupPropertiesFromArrayOfObjects(products.raw,[productsConfig.COLUMN_ID,productsConfig.COLUMN_COLOR])
-    //utils.setSequencialIDToArrayOfObjects(groupedProduct,productsConfig.DISTINCT_ID_COLUMN,productsConfig.DISTINCT_ID_PREFIX)
+    const columnsToAgroup = productsConfig.COLUMN_TO_AGRUP
+
+    const groupedProduct=utils.getGroupPropertiesFromArrayOfObjects(products.raw,columnsToAgroup)
 
     return groupedProduct
 }

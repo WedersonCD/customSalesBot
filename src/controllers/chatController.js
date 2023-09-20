@@ -81,11 +81,15 @@ const setChatUser = (chat, userData) => {
 
 const setChatProducts_String = (chatObject) => {
 
+
     chatObject.products.string = utils.getCopyOfArrayOfObjects(chatObject.products.grouped)
-    utils.deletePropertieFromObjectsInArray(chatObject.products.string, productsConfig.COLUMN_ID)
-    utils.deletePropertieFromObjectsInArray(chatObject.products.string, productsConfig.COLUMN_ID + '_Array')
-    utils.deletePropertieFromObjectsInArray(chatObject.products.string, productsConfig.COLUMN_COLOR)
-    utils.deletePropertieFromObjectsInArray(chatObject.products.string, productsConfig.COLUMN_COLOR + '_Array')
+
+    productsConfig.COLUMN_TO_AGRUP.forEach((columnName)=>{
+
+        utils.deletePropertieFromObjectsInArray(chatObject.products.string, columnName)
+        utils.deletePropertieFromObjectsInArray(chatObject.products.string, columnName+'_Array')
+    })
+
     utils.deletePropertieFromObjectsInArray(chatObject.products.string, 'groupedObjectKey')
     utils.deletePropertieFromObjectsInArray(chatObject.products.string, 'embeddings')
     chatObject.products.string = utils.getCsvStringFromArray(chatObject.products.string)

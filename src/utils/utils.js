@@ -144,7 +144,7 @@ utils.getCsvAsArray = (filePath) => {
     const csvData = fs.readFileSync(filePath, 'utf-8');
 
     const lines = csvData.split('\n');
-    const headers = lines[0].replace('\r','').split(',');
+    const headers = lines[0].replace('\r','').split(';');
   
     //If the first value is the character 'zero-width no-break space' it must be removed.
     if(headers[0].charCodeAt(0)==65279){
@@ -153,7 +153,7 @@ utils.getCsvAsArray = (filePath) => {
     
     const jsonArray = [];
     for (let i = 1; i < lines.length; i++) {
-        const values = lines[i].split(',');
+        const values = lines[i].split(';');
         const jsonEntry = {};
         for (let j = 0; j < headers.length; j++) {
             values[j] = values[j] || ''
@@ -174,11 +174,11 @@ utils.getCsvStringFromArray = (jsonData) => {
 
     const fields = Object.keys(jsonData[0]);
 
-    const csvRows = [fields.join(',')];
+    const csvRows = [fields.join(';')];
 
     jsonData.forEach(obj => {
         const values = fields.map(field => obj[field]);
-        csvRows.push(values.join(','));
+        csvRows.push(values.join(';'));
     });
 
     const csvString = csvRows.join('\n');
@@ -191,7 +191,7 @@ utils.getCsvAsString = (path) => {
 
     const csvFilePath = path
 
-    return fs.readFileSync(csvFilePath, 'utf-8')
+    return fs.readFileSync(csvFilePath, {encoding: 'utf-8'})
 }
 
 module.exports = utils

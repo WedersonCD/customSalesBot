@@ -1,7 +1,7 @@
 
 const openAiConfig = {};
 
-openAiConfig.SECRET_KEY = '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';
+openAiConfig.SECRET_KEY = '';
 openAiConfig.ORGANIZATION_ID='org-DcCBYIlOD6cf96VFX2fmRzpq';
 
 openAiConfig.API_CONFIGURATION= {
@@ -9,7 +9,7 @@ openAiConfig.API_CONFIGURATION= {
     apiKey:openAiConfig.SECRET_KEY
 }
 
-openAiConfig.DEFAULT_CHAT_MODEL = 'gpt-3.5-turbo';
+openAiConfig.DEFAULT_CHAT_MODEL = 'gpt-4';
 openAiConfig.DEFAULT_EMBEDDING_MODEL = 'text-embedding-ada-002';
 
 openAiConfig.DEFAULT_TEMPERATURE=1

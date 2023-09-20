@@ -1,7 +1,7 @@
 const chatConfig = {}
 
 
-chatConfig.WHATSAPP_LINK = 'www.google.com.br';
+chatConfig.WHATSAPP_LINK = 'www.whatsapp.com/stz';
 chatConfig.BOT_NAME = 'Sócrates'
 chatConfig.STORE_PATH = '../data/chat';
 
