@@ -42,9 +42,10 @@ const getSystemMessage = (productsString) =>{
 const createNewInteraction = async (messages,param) =>{
 
     const completion = await openAIService.getNewChatCompletion(messages,param)
-    const awnser = completion.choices[0].message.content;
+    const awnser    = completion.choices[0].message.content;
+    const usage     = completion.usage;
 
-    return  awnser;
+    return  {'awnser':awnser,'usage':usage};
 
 }
 
@@ -53,7 +54,7 @@ const getRecommendedGroupedProductMessage =  async (messages,param) =>{
     messagesWithRecommendedMessage = [... messages]
 
     messagesWithRecommendedMessage.push({role: 'user', content: 'Responda apenas com os códigos dos produtos e nenhum outro texto. Se fossemos parar agora, quais produtos seriam os recomendados?'})
-                                                                    //putting lower temperature to get more direc awnser
+                                                                    //putting lower temperature to get more direct awnser
     return await createNewInteraction(messagesWithRecommendedMessage,{temperature:0});
 
 }

@@ -20,7 +20,16 @@ const getEmptyRecommendationObject = () => {
         groupedProductsIdFromAwnser: [],
         groupedProductsId: [],
         groupedProducts: [],
-        products: []
+        products: [],
+        usage:{
+            total:{
+                tokens:0,
+                inputTokens:0,
+                outputTokens:0,
+                cost:0
+            },
+            interactions: []
+        }
 
     }
 }
@@ -154,6 +163,11 @@ const addChatInteraction = (chatObject) => {
 
 }
 
+const setChatUSage = (chatObject,usage)=>{
+
+
+}
+
 const sendChatMessage = async (req, res) => {
 
     const chatId = req.body.chatId
@@ -166,8 +180,11 @@ const sendChatMessage = async (req, res) => {
 
         //*
         chatObject.status = 'talking'
-        const awnser = await smartBotController.createNewInteraction(chatObject.messages)
+        const interaction = await smartBotController.createNewInteraction(chatObject.messages)
+        const awnser    = interaction.awnser
+        const usage     = interaction.usage
         setChatMessage(chatObject, 'assistant', awnser)
+        setChatUsage(chatObject,usage)
         chatObject.status = 'waiting'
         addChatInteraction(chatObject)
 
