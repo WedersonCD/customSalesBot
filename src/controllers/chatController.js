@@ -4,7 +4,8 @@ const chatConfig = require("../configs/chatConfig")
 const productsConfig = require("../configs/productsConfig")
 const productController = require('./productController')
 
-const utils = require("../utils/utils")
+const utils = require("../utils/utils");
+const openAiConfig = require('../configs/openIAConfig');
 
 
 const PRODUCSTS_PATH = '../data/products/products.csv';
@@ -164,7 +165,10 @@ const addChatInteraction = (chatObject) => {
 }
 
 const setChatCost =(chatObject)=>{
+    const inputCost = chatObject.usage.total.inputTokens/openAiConfig.MODEL_COST_TOKENS_DIVIDER * openAiConfig.MODEL_COST_INPUT
+    const outpuCost = chatObject.usage.total.inputTokens/openAiConfig.MODEL_COST_TOKENS_DIVIDER * openAiConfig.MODEL_COST_OUPUT
 
+    chatObject.usage.total.cost=inputCost+outpuCost
 
 }
 
@@ -254,8 +258,9 @@ const setRecommendationAwnserFromSmartBot = async (recommendationObject, chatObj
         recommendationObject.awnserFromSmartBot = lastMessage;
 
     } else {
-        recommendationObject.awnserFromSmartBot = await smartBotController.getRecommendedGroupedProductMessage(chatObject.messages);
-
+        const interaction= await smartBotController.getRecommendedGroupedProductMessage(chatObject.messages);
+        recommendationObject.awnserFromSmartBot =interaction.awnser
+        setChatUsage(interaction.usage) 
     }
 
 }
