@@ -341,6 +341,18 @@ const setChatProductFromRecommendation = async(req,res)=>{
     }
 }
 
+const getChatCost = async(req,res)=>{
+    try {
+        const chatId = req.body.chatId
+        const chatObject = getChatById(chatId)
+        res.status(200).json(chatObject.usage.total)
+
+    }catch(error){
+
+        res.status(500).json({error: error})
+    }
+}
+getChatCost
 
 module.exports = {
     createChat,
@@ -349,5 +361,6 @@ module.exports = {
     getProductRecommendation,
     saveChat,
     loadSavedChat,
-    setChatProductFromRecommendation
+    setChatProductFromRecommendation,
+    getChatCost
 }
