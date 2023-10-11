@@ -32,6 +32,7 @@ const getEmptyChatObject = () => {
     return {
         id: utils.generateUniqueId(),
         createdAt: utils.getCurrentTimesTamp(),
+        isOverCostLimit: false,
         lastInteractionAt: 0,
         totalIterations: 0,
         status: 'created',
@@ -167,7 +168,7 @@ const addChatInteraction = (chatObject) => {
 
 const setChatCost =(chatObject)=>{
     const inputCost = chatObject.usage.total.inputTokens/openAiConfig.MODEL_COST_TOKENS_DIVIDER * openAiConfig.MODEL_COST_INPUT
-    const outpuCost = chatObject.usage.total.inputTokens/openAiConfig.MODEL_COST_TOKENS_DIVIDER * openAiConfig.MODEL_COST_OUPUT
+    const outpuCost = chatObject.usage.total.outputTokens/openAiConfig.MODEL_COST_TOKENS_DIVIDER * openAiConfig.MODEL_COST_OUTPUT
 
     chatObject.usage.total.cost=inputCost+outpuCost
 
@@ -192,6 +193,12 @@ const sendChatMessage = async (req, res) => {
 
     chatObject = getChatById(chatId)
 
+    if(chatObject.isOverCostLimit){
+        lastInteration=chatObject.messages[chatObject.messages.length-1]
+        res.status(200).json({ chatId: chatId, question: message, awnser: lastInteration.content })
+        return;
+    }
+
     try {
         setChatMessage(chatObject, 'user', message)
 
@@ -206,10 +213,13 @@ const sendChatMessage = async (req, res) => {
         addChatInteraction(chatObject)
 
         res.status(200).json({ chatId: chatId, question: message, awnser: awnser })
-        //*/
+
     } catch (error) {
         console.log(error)
         res.status(500).json({ error: error })
+    }finally{
+        setChatCostIsOverTheLimit(chatObject)
+
     }
 
 }
@@ -261,7 +271,7 @@ const setRecommendationAwnserFromSmartBot = async (recommendationObject, chatObj
     } else {
         const interaction= await smartBotController.getRecommendedGroupedProductMessage(chatObject.messages);
         recommendationObject.awnserFromSmartBot =interaction.awnser
-        setChatUsage(interaction.usage) 
+        setChatUsage(chatObject,interaction.usage) 
     }
 
 }
@@ -292,10 +302,16 @@ const setRecommendationGroupedProductsId = async (recommendationObject)=>{
 }
 
 const getProductRecommendation = async (req, res) => {
+    const chatId = req.query.chatId
+    const chatObject = getChatById(chatId)
+
+    if(chatObject.isOverCostLimit){
+        res.status(200).json(chatObject.recommendations)
+        return;
+    }
 
     try {
-        const chatId = req.query.chatId
-        const chatObject = getChatById(chatId)
+
         const recommendationObject = getEmptyRecommendationObject();
         chatObject.status = 'getting recomendation'
         setRecommendationLastInteration(recommendationObject, chatObject)
@@ -316,16 +332,38 @@ const getProductRecommendation = async (req, res) => {
 
 }
 
-const setChatProducts = (chatObject)=>{
-    return;
+const setDeafultMessageToOverLimite = (chatObject)=>{
+    
+    if(!chatObject.isOverCostLimit){
+        setChatMessage(chatObject, 'assistant', dumbBotController.getDefaultMessageOverCostLimite())
+
+    }
 
 }
 
+
+const setChatCostIsOverTheLimit = (chatObject)=>{
+
+    if(chatObject.usage.total.cost >= chatConfig.COST_LIMIT){
+        setDeafultMessageToOverLimite(chatObject)
+        chatObject.isOverCostLimit=true
+    }
+
+}
+
+
+
 const setChatProductFromRecommendation = async(req,res)=>{
+
     try {
         const chatId = req.body.chatId
         
-        const chatObject = getChatById(chatId)
+        const chatObject = getChatById(chatId)    
+
+        if(chatObject.isOverCostLimit){
+            res.status(200).json(chatObject)
+            return;
+        }
 
         const lastChatRecomendation = chatObject.recommendations[chatObject.recommendations.length-1]
         chatObject.products.raw = lastChatRecomendation.products
@@ -333,18 +371,20 @@ const setChatProductFromRecommendation = async(req,res)=>{
         setChatProducts_String(chatObject)
         const systemMessage = smartBotController.getSystemMessage(chatObject.products.string)
         setChatMessage(chatObject, 'system', systemMessage)
+        
         res.status(200).json(chatObject)
-
-    
     }catch(error){
 
         res.status(500).json({error: error})
+    }finally{
+        setChatCostIsOverTheLimit(chatObject)
+
     }
 }
 
 const getChatCost = async(req,res)=>{
     try {
-        const chatId = req.body.chatId
+        const chatId = req.query.chatId
         const chatObject = getChatById(chatId)
         res.status(200).json(chatObject.usage.total)
 

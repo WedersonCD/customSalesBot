@@ -40,14 +40,24 @@ io.on('connection', async (socket) => {
         })
         .then((response)=>{
             socket.emit('chat awnser',response.data.awnser)
+            axios.get(mainURL+'chatCost?chatId='+chatId).then((response)=>{
+                socket.emit('change cost',response.data)
+    
+            })
         })
 
         const recommendatedProduct = axios.get(  mainURL+'productRecommendation?chatId='+chatId).then((response)=>{
             console.log('recomendation maded')
             socket.emit('chat recommendedProduct',response.data.products)
+            axios.get(mainURL+'chatCost?chatId='+chatId).then((response)=>{
+                socket.emit('change cost',response.data)
+    
+            })
         })
         
     });
+
+ 
 
     socket.on('chat save',()=>{
         axios.post(mainURL+'saveChat',{

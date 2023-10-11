@@ -40,10 +40,15 @@ const getRecommendedGroupedProductIdArrayFromMessage = (message)=>{
 
 }
 
+const getDefaultMessageOverCostLimite = ()=>{
+    return 'Apartir desse momento voce pode falar diretamente com o nosso time de vendas no whatsapp, eles vão conseguir te instruir melhor: '+chatConfig.WHATSAPP_LINK
+}
+
 module.exports = {
     getDefaultMessageInChatOpened,
     getRecommendedGroupedProductIdArrayFromMessage,
-    MessageHaveAtLeastOneProductRecomendation
+    MessageHaveAtLeastOneProductRecomendation,
+    getDefaultMessageOverCostLimite
 }
 
 

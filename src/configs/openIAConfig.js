@@ -9,11 +9,25 @@ openAiConfig.API_CONFIGURATION= {
     apiKey:openAiConfig.SECRET_KEY
 }
 
+//openAiConfig.DEFAULT_CHAT_MODEL = 'gpt-3.5-turbo';
 openAiConfig.DEFAULT_CHAT_MODEL = 'gpt-4';
+
 openAiConfig.DEFAULT_EMBEDDING_MODEL = 'text-embedding-ada-002';
 
-openAiConfig.MODEL_COST_INPUT=0.03
-openAiConfig.MODEL_COST_OUPUT=0.06
+const pricingList = {
+    'gpt-3.5-turbo':{
+        input:0.0015,
+        output:0.002
+    },
+    'gpt-4':{
+        input:0.03,
+        output:0.06
+    },
+
+}
+
+openAiConfig.MODEL_COST_INPUT=pricingList[openAiConfig.DEFAULT_CHAT_MODEL].input
+openAiConfig.MODEL_COST_OUTPUT=pricingList[openAiConfig.DEFAULT_CHAT_MODEL].output
 openAiConfig.MODEL_COST_TOKENS_DIVIDER=1000
 
 
